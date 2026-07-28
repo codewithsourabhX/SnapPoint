@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import {
   PageView,
@@ -99,6 +99,11 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentPage, setCurrentPage] = useState<PageView>('landing');
+  const currentPageRef = useRef(currentPage);
+  useEffect(() => {
+    currentPageRef.current = currentPage;
+  }, [currentPage]);
+
   const [user, setUser] = useState<UserProfile>(GUEST_USER);
   const [authLoading, setAuthLoading] = useState<boolean>(true);
   const [darkMode, setDarkMode] = useState<boolean>(true);
@@ -153,6 +158,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               isAdmin: isAdminUser
             });
             setGoogleAuthPending(null);
+            if (currentPageRef.current === 'login' || currentPageRef.current === 'signup' || currentPageRef.current === 'landing') {
+              setCurrentPage('dashboard');
+            }
           } else {
             // New user detected without completed profile in Firestore (e.g. Google Sign In)
             // Show details modal to fill in Name & optional Referral Code

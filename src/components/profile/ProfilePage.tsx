@@ -132,18 +132,6 @@ export const ProfilePage: React.FC = () => {
 
             <div>
               <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                Phone Number
-              </label>
-              <input
-                type="text"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-            </div>
-
-            <div>
-              <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                 Country / Region
               </label>
               <input
@@ -216,10 +204,7 @@ export const ProfilePage: React.FC = () => {
                 <span className="font-semibold text-slate-800 dark:text-slate-200">Google Account</span>
                 <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">Connected</span>
               </div>
-              <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/40 flex items-center justify-between">
-                <span className="font-semibold text-slate-800 dark:text-slate-200">Phone Verification</span>
-                <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">Verified</span>
-              </div>
+
             </div>
           </div>
         </div>
