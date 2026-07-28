@@ -14,7 +14,8 @@ import {
   Sparkles,
   HelpCircle,
   ShieldCheck,
-  ShieldAlert
+  ShieldAlert,
+  LayoutDashboard
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { PageView } from '../../types';
@@ -46,7 +47,7 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand Logo */}
         <div
-          onClick={() => navigateTo(isPublicPage ? 'landing' : 'surveys')}
+          onClick={() => navigateTo(isPublicPage ? 'landing' : 'dashboard')}
           className="flex items-center gap-2.5 cursor-pointer group"
         >
           <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-400 flex items-center justify-center text-slate-950 font-bold shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform">
@@ -200,6 +201,14 @@ export const Navbar: React.FC = () => {
                           <span>Admin Control Panel</span>
                         </button>
                       )}
+
+                      <button
+                        onClick={() => navigateTo('dashboard')}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-left font-medium"
+                      >
+                        <LayoutDashboard className="w-4 h-4 text-slate-400" />
+                        <span>My Dashboard</span>
+                      </button>
 
                       <button
                         onClick={() => navigateTo('profile')}

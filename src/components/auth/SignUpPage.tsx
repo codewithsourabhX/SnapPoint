@@ -110,7 +110,7 @@ export const SignUpPage: React.FC = () => {
         type: 'success'
       });
       triggerConfetti();
-      setCurrentPage('surveys');
+      setCurrentPage('dashboard');
     } catch (err: any) {
       console.error('Firebase SignUp Error:', err);
       let errMsg = err?.message || 'Could not create account.';

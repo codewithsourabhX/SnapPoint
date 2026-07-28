@@ -27,21 +27,24 @@ import {
   serverTimestamp
 } from "firebase/firestore";
 
-// User's explicitly provided PollBee Firebase configuration
+import appletConfig from "../../firebase-applet-config.json";
+
+// User's explicitly provided PollBee Firebase configuration synched with Applet Config
 export const firebaseConfig = {
-  apiKey: "AIzaSyB4m7bnVx5qZDvX1pDYiplY_kDovaK7Svk",
-  authDomain: "pollbee.firebaseapp.com",
-  projectId: "pollbee",
-  storageBucket: "pollbee.firebasestorage.app",
-  messagingSenderId: "980656281491",
-  appId: "1:980656281491:web:b5b7cdcee2d7b6d02a7a66",
-  measurementId: "G-PDY8BN0MLN"
+  apiKey: appletConfig.apiKey,
+  authDomain: appletConfig.authDomain,
+  projectId: appletConfig.projectId,
+  storageBucket: appletConfig.storageBucket,
+  messagingSenderId: appletConfig.messagingSenderId,
+  appId: appletConfig.appId,
+  measurementId: appletConfig.measurementId || "",
+  firestoreDatabaseId: appletConfig.firestoreDatabaseId
 };
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
 export const googleProvider = new GoogleAuthProvider();
 
 // Safe Analytics Initialization

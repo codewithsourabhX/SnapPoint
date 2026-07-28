@@ -4,6 +4,8 @@ export type PageView =
   | 'login'
   | 'dashboard'
   | 'surveys'
+  | 'games'
+  | 'tasks'
   | 'referrals'
   | 'profile'
   | 'notifications'

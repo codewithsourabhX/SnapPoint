@@ -3,9 +3,10 @@ import {
   LayoutDashboard,
   ClipboardList,
   Gift,
-  Calendar,
   User,
-  ShieldCheck
+  ShieldCheck,
+  Wallet,
+  CheckSquare
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { PageView } from '../../types';
@@ -21,14 +22,15 @@ export const MobileBottomNav: React.FC = () => {
   if (isPublicPage) return null;
 
   const navItems = [
+    { id: 'dashboard' as PageView, label: 'Home', icon: LayoutDashboard },
     { id: 'surveys' as PageView, label: 'Surveys', icon: ClipboardList },
-    { id: 'withdraw' as PageView, label: 'Withdraw', icon: Gift },
-    { id: 'referrals' as PageView, label: 'Referrals', icon: User },
+    { id: 'tasks' as PageView, label: 'Tasks', icon: CheckSquare },
+    { id: 'withdraw' as PageView, label: 'Withdraw', icon: Wallet },
     { id: 'profile' as PageView, label: 'Profile', icon: User }
   ];
 
   if (user.isAdmin) {
-    navItems[3] = { id: 'admin' as PageView, label: 'Admin', icon: ShieldCheck };
+    navItems[4] = { id: 'admin' as PageView, label: 'Admin', icon: ShieldCheck };
   }
 
   return (

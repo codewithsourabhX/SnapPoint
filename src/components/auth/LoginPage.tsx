@@ -26,7 +26,7 @@ export const LoginPage: React.FC = () => {
         message: `Successfully logged in as ${res.user.email}`,
         type: 'success'
       });
-      setCurrentPage('surveys');
+      setCurrentPage('dashboard');
     } catch (err: any) {
       console.error('Firebase Auth Error:', err);
       let errMsg = err?.message || 'Invalid email or password.';

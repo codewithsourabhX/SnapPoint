@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Loader2, Coins, Wallet } from 'lucide-react';
+import { Loader2, Coins, Wallet, ShieldAlert } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { auth } from '../../lib/firebase';
 
 export const SurveysPage: React.FC = () => {
   const { user, authLoading, setCurrentPage } = useApp();
   const [loading, setLoading] = useState(true);
+  const [adBlockDetected, setAdBlockDetected] = useState(false);
 
   useEffect(() => {
     // If auth state is resolved, check login status
@@ -60,6 +61,7 @@ export const SurveysPage: React.FC = () => {
 
       script.onerror = () => {
         setLoading(false);
+        setAdBlockDetected(true);
       };
 
       document.body.appendChild(script);
@@ -118,7 +120,7 @@ export const SurveysPage: React.FC = () => {
       </div>
 
       {/* Loading Indicator for CPX Survey Wall */}
-      {loading && (
+      {loading && !adBlockDetected && (
         <div className="flex flex-col items-center justify-center py-16 space-y-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
           <Loader2 className="w-9 h-9 text-amber-500 animate-spin" />
           <div className="text-center space-y-1">
@@ -128,10 +130,25 @@ export const SurveysPage: React.FC = () => {
         </div>
       )}
 
+      {/* Ad Blocker Detection Warning */}
+      {adBlockDetected && (
+        <div className="p-6 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 space-y-3 text-center max-w-xl mx-auto my-8">
+          <div className="w-12 h-12 rounded-full bg-rose-500/10 flex items-center justify-center mx-auto text-rose-500">
+            <ShieldAlert className="w-6 h-6" />
+          </div>
+          <h3 className="text-base font-bold">Ad Blocker Detected</h3>
+          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            We noticed that your browser is blocking our survey provider. To load surveys and earn reward points, please disable your ad blocker (e.g. AdBlock, uBlock, or Brave Shield) for PollBee.
+          </p>
+        </div>
+      )}
+
       {/* CPX Survey Wall Container */}
-      <div className="w-full">
-        <div id="fullscreen" style={{ maxWidth: '950px', margin: 'auto' }}></div>
-      </div>
+      {!adBlockDetected && (
+        <div className="w-full">
+          <div id="fullscreen" style={{ maxWidth: '950px', margin: 'auto' }}></div>
+        </div>
+      )}
     </div>
   );
 };

@@ -7,11 +7,13 @@ import {
   WithdrawalTransaction,
   NotificationItem,
   ToastMessage,
-  ActivityLog
+  ActivityLog,
+  TaskItem
 } from '../types';
 import { INITIAL_SURVEYS } from '../data/surveysData';
 import { INITIAL_NOTIFICATIONS } from '../data/notificationsData';
 import { INITIAL_ACTIVITIES } from '../data/activityData';
+import { INITIAL_TASKS } from '../data/tasksData';
 import { 
   auth, 
   db, 
@@ -54,6 +56,7 @@ interface AppContextType {
   darkMode: boolean;
   toggleDarkMode: () => void;
   surveys: Survey[];
+  tasks: TaskItem[];
   withdrawalTransactions: WithdrawalTransaction[];
   notifications: NotificationItem[];
   unreadNotificationsCount: number;
@@ -66,6 +69,7 @@ interface AppContextType {
   removeToast: (id: string) => void;
   addPoints: (points: number, sourceTitle: string, type?: ActivityLog['type']) => void;
   completeSurvey: (surveyId: string, pointsEarned: number) => void;
+  completeTask: (taskId: string, pointsEarned: number) => void;
   requestDetailedWithdrawal: (payload: DetailedWithdrawalPayload) => boolean;
   markNotificationRead: (id: string) => void;
   markAllNotificationsRead: () => void;
@@ -103,6 +107,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [authLoading, setAuthLoading] = useState<boolean>(true);
   const [darkMode, setDarkMode] = useState<boolean>(true);
   const [surveys, setSurveys] = useState<Survey[]>(INITIAL_SURVEYS);
+  const [tasks, setTasks] = useState<TaskItem[]>(INITIAL_TASKS);
   const [withdrawalTransactions, setWithdrawalTransactions] = useState<WithdrawalTransaction[]>([]);
   const [notifications, setNotifications] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
   const [activities, setActivities] = useState<ActivityLog[]>(INITIAL_ACTIVITIES);
@@ -262,7 +267,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       type: 'success'
     });
     triggerConfetti();
-    setCurrentPage('surveys');
+    setCurrentPage('dashboard');
   };
 
   const toggleDarkMode = () => {
@@ -319,7 +324,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               isAdmin: auth.currentUser.email === 'yadavsourabh8585@gmail.com'
             });
           }
-          setCurrentPage('surveys');
+          setCurrentPage('dashboard');
           return true;
         }
       } catch (e) {
@@ -423,6 +428,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const surveyObj = surveys.find(s => s.id === surveyId);
     const title = surveyObj ? surveyObj.title : 'CPX Survey';
     addPoints(pointsEarned, `Completed Survey: ${title}`, 'survey');
+  };
+
+  const completeTask = (taskId: string, pointsEarned: number) => {
+    setTasks(prev =>
+      prev.map(t => (t.id === taskId ? { ...t, status: 'Completed' } : t))
+    );
+    const taskObj = tasks.find(t => t.id === taskId);
+    const title = taskObj ? taskObj.title : 'Quick Micro-Task';
+    addPoints(pointsEarned, `Completed Task: ${title}`, 'task');
   };
 
   const requestDetailedWithdrawal = (payload: DetailedWithdrawalPayload) => {
@@ -546,6 +560,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         darkMode,
         toggleDarkMode,
         surveys,
+        tasks,
         withdrawalTransactions,
         notifications,
         unreadNotificationsCount,
@@ -558,6 +573,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         removeToast,
         addPoints,
         completeSurvey,
+        completeTask,
         requestDetailedWithdrawal,
         markNotificationRead,
         markAllNotificationsRead,

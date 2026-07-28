@@ -12,7 +12,9 @@ import {
   Sparkles,
   ShieldCheck,
   FileText,
-  Wallet
+  Wallet,
+  Gamepad2,
+  CheckSquare
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { PageView } from '../../types';
@@ -21,7 +23,10 @@ export const Sidebar: React.FC = () => {
   const { currentPage, setCurrentPage, unreadNotificationsCount, user, signOutUser } = useApp();
 
   const navItems = [
+    { id: 'dashboard' as PageView, label: 'Dashboard', icon: LayoutDashboard },
     { id: 'surveys' as PageView, label: 'Surveys', icon: ClipboardList, badge: 'High Payout' },
+    { id: 'tasks' as PageView, label: 'Tasks & Offers', icon: CheckSquare },
+    { id: 'games' as PageView, label: 'Play Games', icon: Gamepad2, badge: 'Bonus' },
     { id: 'withdraw' as PageView, label: 'Withdraw Money', icon: Wallet, highlight: true },
     { id: 'referrals' as PageView, label: 'Refer & Earn (10%)', icon: Users },
     {

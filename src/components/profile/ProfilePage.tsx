@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { User, Mail, Phone, Globe, Lock, Bell, Shield, Save, CheckCircle2 } from 'lucide-react';
+import { User, Mail, Phone, Globe, Lock, Bell, Shield, Save, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { auth } from '../../lib/firebase';
+import { updatePassword } from 'firebase/auth';
 
 export const ProfilePage: React.FC = () => {
   const { user, setUser, addToast } = useApp();
@@ -12,6 +14,8 @@ export const ProfilePage: React.FC = () => {
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [passwordLoading, setPasswordLoading] = useState(false);
+  const isGoogleUser = auth.currentUser?.providerData.some(p => p.providerId === 'google.com');
 
   // Notification Preferences State
   const [surveyAlerts, setSurveyAlerts] = useState(true);
@@ -37,19 +41,43 @@ export const ProfilePage: React.FC = () => {
     });
   };
 
-  const handleChangePassword = (e: React.FormEvent) => {
+  const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!currentPassword || !newPassword) {
-      addToast({ title: 'Validation Error', message: 'Please complete all password fields.', type: 'warning' });
+    if (isGoogleUser) return;
+    if (!newPassword) {
+      addToast({ title: 'Validation Error', message: 'Please enter a new password.', type: 'warning' });
       return;
     }
-    addToast({
-      title: 'Password Changed Successfully! 🔒',
-      message: 'Your account security credentials have been updated.',
-      type: 'success'
-    });
-    setCurrentPassword('');
-    setNewPassword('');
+    if (newPassword.length < 6) {
+      addToast({ title: 'Validation Error', message: 'Password must be at least 6 characters long.', type: 'warning' });
+      return;
+    }
+    if (!auth.currentUser) return;
+
+    setPasswordLoading(true);
+    try {
+      await updatePassword(auth.currentUser, newPassword);
+      addToast({
+        title: 'Password Changed Successfully! 🔒',
+        message: 'Your account security credentials have been updated.',
+        type: 'success'
+      });
+      setCurrentPassword('');
+      setNewPassword('');
+    } catch (err: any) {
+      console.error('Password change error:', err);
+      let errMsg = err.message || 'Failed to update password.';
+      if (err.code === 'auth/requires-recent-login') {
+        errMsg = 'This operation is sensitive and requires recent authentication. Please log out and log back in to change your password.';
+      }
+      addToast({
+        title: 'Password Update Failed',
+        message: errMsg,
+        type: 'error'
+      });
+    } finally {
+      setPasswordLoading(false);
+    }
   };
 
   return (
@@ -92,13 +120,13 @@ export const ProfilePage: React.FC = () => {
 
             <div>
               <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                Email Address
+                Email Address (Cannot be changed)
               </label>
               <input
                 type="email"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                disabled
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800/30 text-slate-500 cursor-not-allowed focus:outline-none"
               />
             </div>
 
@@ -145,40 +173,35 @@ export const ProfilePage: React.FC = () => {
               <span>Change Password</span>
             </h2>
 
-            <form onSubmit={handleChangePassword} className="space-y-3 text-xs">
-              <div>
-                <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  Current Password
-                </label>
-                <input
-                  type="password"
-                  value={currentPassword}
-                  onChange={e => setCurrentPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                />
+            {isGoogleUser ? (
+              <div className="p-3.5 rounded-xl bg-amber-500/10 dark:bg-slate-800 border border-amber-500/20 text-xs font-bold text-amber-800 dark:text-amber-400 flex items-start gap-2.5">
+                <AlertCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                <span>You are signed in with Google. Password management and security are handled directly through your Google Account.</span>
               </div>
+            ) : (
+              <form onSubmit={handleChangePassword} className="space-y-3 text-xs">
+                <div>
+                  <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    New Password
+                  </label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={e => setNewPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  />
+                </div>
 
-              <div>
-                <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  New Password
-                </label>
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={e => setNewPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold transition-all shadow-xs"
-              >
-                Update Password
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  disabled={passwordLoading}
+                  className="w-full py-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold transition-all shadow-xs flex items-center justify-center gap-2 disabled:opacity-60"
+                >
+                  {passwordLoading ? 'Updating Password...' : 'Update Password'}
+                </button>
+              </form>
+            )}
           </div>
 
           {/* Connected Accounts */}
