@@ -1,0 +1,6 @@
+{
+  "name": "PollBee",
+  "description": "PollBee - Earn cash & rewards by completing real surveys powered by CPX Research, daily login bonuses, and referral commissions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,78 @@
+{
+  "entities": {
+    "users": {
+      "title": "User Profile",
+      "description": "User profiles and reward balances for PollBee members",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "avatar": { "type": "string" },
+        "points": { "type": "number" },
+        "balanceInRupees": { "type": "number" },
+        "completedSurveysCount": { "type": "number" },
+        "pendingRewardsInRupees": { "type": "number" },
+        "referralEarningsInRupees": { "type": "number" },
+        "referralCode": { "type": "string" },
+        "referralLink": { "type": "string" },
+        "totalReferrals": { "type": "number" },
+        "activeReferrals": { "type": "number" },
+        "currentStreak": { "type": "number" },
+        "isAdmin": { "type": "boolean" },
+        "referredBy": { "type": "string" },
+        "referredByCode": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["uid", "email"]
+    },
+    "payouts": {
+      "title": "Payout Requests",
+      "description": "Withdrawal payout transaction records",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" },
+        "method": { "type": "string" },
+        "accountDetail": { "type": "string" },
+        "amountInPoints": { "type": "number" },
+        "amountInRupees": { "type": "number" },
+        "status": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "userName": { "type": "string" },
+        "uid": { "type": "string" }
+      },
+      "required": ["id", "amountInPoints", "status"]
+    },
+    "cpx_transactions": {
+      "title": "CPX Research Transactions",
+      "description": "Log of postback survey reward transactions from CPX Research",
+      "properties": {
+        "transId": { "type": "string" },
+        "userId": { "type": "string" },
+        "status": { "type": "number" },
+        "subid1": { "type": "string" },
+        "subid2": { "type": "string" },
+        "amountLocal": { "type": "number" },
+        "amountUsd": { "type": "number" },
+        "type": { "type": "string" },
+        "hash": { "type": "string" },
+        "ipClick": { "type": "string" },
+        "processedAt": { "type": "string" }
+      },
+      "required": ["transId", "userId", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/users" },
+      "description": "User profiles collection"
+    },
+    "/payouts/{payoutId}": {
+      "schema": { "$ref": "#/entities/payouts" },
+      "description": "Payout requests collection"
+    },
+    "/cpx_transactions/{transId}": {
+      "schema": { "$ref": "#/entities/cpx_transactions" },
+      "description": "CPX Research postback transactions collection"
+    }
+  }
+}

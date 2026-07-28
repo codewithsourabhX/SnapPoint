@@ -1,0 +1,26 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // User profile documents
+    match /users/{userId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Payout / Withdrawal requests
+    match /payouts/{payoutId} {
+      allow read, create, update: if request.auth != null;
+    }
+
+    // CPX Research postback transactions
+    match /cpx_transactions/{transId} {
+      allow read: if request.auth != null && (resource.data.userId == request.auth.uid || request.auth.token.email == 'yadavsourabh8585@gmail.com');
+      allow write: if false; // Server-only endpoint manages CPX transactions
+    }
+
+    // Default fallback rule for authenticated users
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
