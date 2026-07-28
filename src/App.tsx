@@ -142,17 +142,16 @@ const AppContent: React.FC = () => {
             </div>
 
             <h3 className="text-xl font-extrabold text-amber-500 dark:text-amber-400">
-              Congratulations, your time pays off! 🎉
+              Request Submitted! 🎉
             </h3>
 
             <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 leading-relaxed">
-              Your request for <span className="text-amber-500 font-bold">₹{activeModal.payload?.amountRupees}</span> via{' '}
-              <span className="font-bold">{activeModal.payload?.method}</span> ({activeModal.payload?.accountDetail}) has been submitted successfully!
+              Your withdrawal request for <span className="text-amber-500 font-bold">₹{activeModal.payload?.amountRupees}</span> has been submitted successfully!
             </p>
 
             <div className="p-3.5 rounded-xl bg-amber-500/10 dark:bg-slate-800 border border-amber-500/30 text-xs font-bold text-amber-800 dark:text-amber-300 flex items-center justify-center gap-2">
               <Clock className="w-4 h-4 text-amber-500 shrink-0" />
-              <span>You will receive your reward in the next 48 hours.</span>
+              <span>Your request is submitted and you will get your reward in the next 48 hours.</span>
             </div>
 
             <div className="pt-2 flex gap-3">

@@ -42,8 +42,6 @@ export const WithdrawPage: React.FC = () => {
   // Amount state
   const [pointsToWithdraw, setPointsToWithdraw] = useState<number>(5000);
 
-  // Success Modal state
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [formError, setFormError] = useState('');
 
   const targetGoal = 5000;
@@ -74,7 +72,12 @@ export const WithdrawPage: React.FC = () => {
       });
 
       if (success !== false) {
-        setShowSuccessModal(true);
+        setUpiFirstName('');
+        setUpiLastName('');
+        setUpiId('');
+        setBankName('');
+        setIfscCode('');
+        setAccountNo('');
       }
     } else if (selectedMethod === 'PayPal') {
       if (!paypalName.trim() || !paypalEmail.trim()) {
@@ -90,7 +93,8 @@ export const WithdrawPage: React.FC = () => {
       });
 
       if (success !== false) {
-        setShowSuccessModal(true);
+        setPaypalName('');
+        setPaypalEmail('');
       }
     }
   };
@@ -484,57 +488,6 @@ export const WithdrawPage: React.FC = () => {
         )}
       </div>
 
-      {/* SUCCESS POPUP MODAL */}
-      <AnimatePresence>
-        {showSuccessModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="w-full max-w-md p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl text-center space-y-4 relative"
-            >
-              <button
-                onClick={() => {
-                  setShowSuccessModal(false);
-                  setCurrentPage('surveys');
-                }}
-                className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center mx-auto ring-8 ring-emerald-500/5">
-                <CheckCircle2 className="w-10 h-10" />
-              </div>
-
-              <div>
-                <h3 className="text-xl font-extrabold text-amber-500 dark:text-amber-400">
-                  Congratulations, your time pays off! 🎉
-                </h3>
-                <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
-                  Your withdrawal request was submitted successfully! You will receive your reward in the next 48 hours.
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-xs font-bold text-amber-800 dark:text-amber-300 flex items-center justify-center gap-2">
-                <Clock className="w-4 h-4 text-amber-500 shrink-0" />
-                <span>Processing Team Notified • Payout inside 48 Hours</span>
-              </div>
-
-              <button
-                onClick={() => {
-                  setShowSuccessModal(false);
-                  setCurrentPage('surveys');
-                }}
-                className="w-full py-3 px-4 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-extrabold text-xs hover:bg-slate-800 dark:hover:bg-white transition-all"
-              >
-                Return to Surveys
-              </button>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-    </div>
+      </div>
   );
 };
