@@ -2,11 +2,10 @@ import React from 'react';
 import {
   LayoutDashboard,
   ClipboardList,
-  Gift,
   User,
   ShieldCheck,
   Wallet,
-  CheckSquare
+  Users
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { PageView } from '../../types';
@@ -24,8 +23,8 @@ export const MobileBottomNav: React.FC = () => {
   const navItems = [
     { id: 'dashboard' as PageView, label: 'Home', icon: LayoutDashboard },
     { id: 'surveys' as PageView, label: 'Surveys', icon: ClipboardList },
-    { id: 'tasks' as PageView, label: 'Tasks', icon: CheckSquare },
     { id: 'withdraw' as PageView, label: 'Withdraw', icon: Wallet },
+    { id: 'referrals' as PageView, label: 'Referrals', icon: Users },
     { id: 'profile' as PageView, label: 'Profile', icon: User }
   ];
 

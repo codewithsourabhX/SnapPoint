@@ -14,8 +14,6 @@ import { SignUpPage } from './components/auth/SignUpPage';
 import { LoginPage } from './components/auth/LoginPage';
 import { DashboardPage } from './components/dashboard/DashboardPage';
 import { SurveysPage } from './components/surveys/SurveysPage';
-import { GamesPage } from './components/games/GamesPage';
-import { TasksPage } from './components/tasks/TasksPage';
 import { ReferralsPage } from './components/referral/ReferralsPage';
 import { ProfilePage } from './components/profile/ProfilePage';
 import { NotificationsPage } from './components/notifications/NotificationsPage';
@@ -62,10 +60,6 @@ const AppContent: React.FC = () => {
         return <DashboardPage />;
       case 'surveys':
         return <SurveysPage />;
-      case 'games':
-        return <GamesPage />;
-      case 'tasks':
-        return <TasksPage />;
       case 'referrals':
         return <ReferralsPage />;
       case 'profile':
