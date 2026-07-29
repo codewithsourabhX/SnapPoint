@@ -266,7 +266,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setGoogleAuthPending(null);
     addToast({
       title: 'Registration Complete! 🎉',
-      message: 'Welcome to SnapPoint! 500 Welcome Points credited to your account.',
+      message: 'Welcome to SnapPoint! 500 Welcome SnapPoints credited to your account.',
       type: 'success'
     });
     triggerConfetti();
@@ -406,7 +406,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setActivities(prev => [newActivity, ...prev]);
 
     addToast({
-      title: `+${pointsToAdd} Points Credited! 🐝`,
+      title: `+${pointsToAdd} SnapPoints Credited!`,
       message: `${sourceTitle} - ₹${(pointsToAdd / 10).toFixed(0)} added to balance.`,
       type: 'success'
     });
@@ -439,7 +439,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (amountPoints < 5000) {
       addToast({
         title: 'Minimum Limit Requirement',
-        message: 'Minimum withdrawal amount is 5,000 Points (₹500).',
+        message: 'Minimum withdrawal amount is 5,000 SnapPoints (₹500).',
         type: 'warning'
       });
       return false;
@@ -448,7 +448,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (user.points < amountPoints) {
       addToast({
         title: 'Insufficient Balance',
-        message: 'You do not have enough points for this withdrawal amount.',
+        message: 'You do not have enough SnapPoints for this withdrawal amount.',
         type: 'error'
       });
       return false;

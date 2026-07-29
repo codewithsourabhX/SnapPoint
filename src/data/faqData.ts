@@ -4,13 +4,13 @@ export const INITIAL_FAQS: FAQItem[] = [
   {
     id: 'faq-1',
     question: 'How do points translate into real currency?',
-    answer: 'Every 10 SnapPoint Points equals ₹1 (or equivalent local currency). For example, 5,000 Points can be instantly redeemed for ₹500 via UPI, Amazon Gift Cards, Flipkart Vouchers, or PayPal Cash.',
+    answer: 'Every 10 SnapPoints equals ₹1 (or equivalent local currency). For example, 5,000 SnapPoints can be instantly redeemed for ₹500 via UPI, Amazon Gift Cards, Flipkart Vouchers, or PayPal Cash.',
     category: 'General'
   },
   {
     id: 'faq-2',
     question: 'What is the minimum withdrawal limit?',
-    answer: 'The minimum threshold for redemption is 5,000 Points (₹500). Once you reach 5,000 points, you can submit a withdrawal request anytime.',
+    answer: 'The minimum threshold for redemption is 5,000 SnapPoints (₹500). Once you reach 5,000 SnapPoints, you can submit a withdrawal request anytime.',
     category: 'Payouts'
   },
   {
@@ -28,7 +28,7 @@ export const INITIAL_FAQS: FAQItem[] = [
   {
     id: 'faq-5',
     question: 'How does the Referral Program work?',
-    answer: 'Share your unique referral code or link. You get a starter bonus when your friend registers, plus a 10% lifetime commission on all points they earn from surveys and tasks!',
+    answer: 'Share your unique referral code or link. You get a starter bonus when your friend registers, plus a 10% lifetime commission on all SnapPoints they earn from surveys and tasks!',
     category: 'Referrals'
   },
   {

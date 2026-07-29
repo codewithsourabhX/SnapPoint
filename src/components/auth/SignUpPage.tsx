@@ -163,7 +163,7 @@ export const SignUpPage: React.FC = () => {
             Create Free SnapPoint Account
           </h2>
           <p className="text-xs font-bold text-rose-600 dark:text-rose-400 mt-1">
-            🎁 Get 500 Bonus Points (₹50) on sign up!
+            🎁 Get 500 Bonus SnapPoints (₹50) on sign up!
           </p>
         </div>
 

@@ -58,7 +58,7 @@ export const LandingPage: React.FC = () => {
             transition={{ delay: 0.2 }}
             className="mt-6 text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed"
           >
-            Complete surveys to collect points and redeem exciting rewards. Sign up today to get 500 welcome bonus points instantly!
+            Complete surveys to collect SnapPoints and redeem exciting rewards. Sign up today to get 500 welcome bonus SnapPoints instantly!
           </motion.p>
 
           {/* CTA Buttons */}
@@ -72,7 +72,7 @@ export const LandingPage: React.FC = () => {
               onClick={() => setCurrentPage('signup')}
               className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-base shadow-xl shadow-rose-600/20 transition-all flex items-center justify-center gap-2 group active:scale-95 cursor-pointer"
             >
-              <span>Sign Up for 500 Bonus Points</span>
+              <span>Sign Up for 500 SnapPoints</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
 
@@ -93,7 +93,7 @@ export const LandingPage: React.FC = () => {
           >
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-rose-500" />
-              <span>Minimum Payout: 5000 Pts (₹500)</span>
+              <span>Minimum Payout: 5000 SnapPoints (₹500)</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-rose-500" />
@@ -127,7 +127,7 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Create Account</h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Sign up in seconds with your email or Google Auth. Receive starter bonus points immediately.
+                Sign up in seconds with your email or Google Auth. Receive starter bonus SnapPoints immediately.
               </p>
             </div>
 
@@ -138,7 +138,7 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Complete Surveys</h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Answer high-paying opinion surveys from top market research partners. Earn points automatically credited to your balance.
+                Answer high-paying opinion surveys from top market research partners. Earn SnapPoints automatically credited to your balance.
               </p>
             </div>
 
@@ -149,7 +149,7 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Cash Out Rewards</h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Redeem 5,000 Points for ₹500 via UPI (GPay/PhonePe), PayPal, Amazon or Flipkart gift cards.
+                Redeem 5,000 SnapPoints for ₹500 via UPI (GPay/PhonePe), PayPal, Amazon or Flipkart gift cards.
               </p>
             </div>
           </div>
@@ -164,7 +164,7 @@ export const LandingPage: React.FC = () => {
               Supported Payout Options
             </h2>
             <p className="text-slate-600 dark:text-slate-400 text-sm mt-3">
-              Minimum threshold: 5,000 Points = ₹500
+              Minimum threshold: 5,000 SnapPoints = ₹500
             </p>
           </div>
 

@@ -292,9 +292,9 @@ export const ProfilePage: React.FC = () => {
           <span className="text-[9px] px-2 py-0.5 rounded bg-rose-500/10 text-rose-600 font-extrabold uppercase tracking-wider">
             Earn 10% Commission
           </span>
-          <h3 className="text-sm font-extrabold text-slate-900">Invite Friends & Earn Points</h3>
+          <h3 className="text-sm font-extrabold text-slate-900">Invite Friends & Earn SnapPoints</h3>
           <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
-            Get instant starter bonus points when your friends sign up, plus a 10% lifetime commission on all survey earnings!
+            Get instant starter bonus SnapPoints when your friends sign up, plus a 10% lifetime commission on all survey earnings!
           </p>
         </div>
 
@@ -305,7 +305,7 @@ export const ProfilePage: React.FC = () => {
                 Your Referral Code
               </label>
               <p className="text-[11px] text-slate-500 mt-0.5">
-                Friends enter this code during sign up to get 500 welcome points.
+                Friends enter this code during sign up to get 500 welcome SnapPoints.
               </p>
             </div>
             

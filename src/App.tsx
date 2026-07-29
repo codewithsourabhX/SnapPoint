@@ -90,7 +90,7 @@ const AppContent: React.FC = () => {
           </div>
           
           <div className="px-3.5 py-1.5 rounded-full bg-rose-600 text-white font-bold text-[11px] flex items-center gap-1.5 shadow-sm shadow-rose-600/20 active:scale-95 transition-all">
-            <span>{(user.points || 0).toLocaleString()} gp</span>
+            <span>{(user.points || 0).toLocaleString()} sp</span>
             <span className="opacity-70">≈</span>
             <span>INR {(user.balanceInRupees || 0).toLocaleString()}</span>
           </div>

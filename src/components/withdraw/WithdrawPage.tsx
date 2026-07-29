@@ -109,9 +109,9 @@ export const WithdrawPage: React.FC = () => {
       <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
         <div className="text-center font-bold text-slate-800 text-xs">
           {pointsNeeded > 0 ? (
-            <span>You need <strong className="text-rose-600 font-extrabold">{pointsNeeded.toLocaleString()}</strong> gp to redeem your first reward!</span>
+            <span>You need <strong className="text-rose-600 font-extrabold">{pointsNeeded.toLocaleString()}</strong> sp to redeem your first reward!</span>
           ) : (
-            <span className="text-emerald-600 font-extrabold">You have enough points to redeem your reward! 🎉</span>
+            <span className="text-emerald-600 font-extrabold">You have enough SnapPoints to redeem your reward! 🎉</span>
           )}
         </div>
         
@@ -138,7 +138,7 @@ export const WithdrawPage: React.FC = () => {
           <span>PRO TIP</span>
         </div>
         <p className="leading-relaxed font-medium">
-          SnapPoint offers quick and secure payouts via UPI and PayPal. Once you reach 5,000 points (equivalent to ₹500), you can request a withdrawal and start enjoying your earnings!
+          SnapPoint offers quick and secure payouts via UPI and PayPal. Once you reach 5,000 SnapPoints (equivalent to ₹500), you can request a withdrawal and start enjoying your earnings!
         </p>
       </div>
 
@@ -177,7 +177,7 @@ export const WithdrawPage: React.FC = () => {
             <span className="text-blue-600 font-black text-xl italic tracking-tighter">Pay<span className="text-cyan-500">Pal</span></span>
           </div>
           <span className="text-xs font-bold text-slate-800">PayPal Cashout</span>
-          <span className="text-[10px] text-slate-400">Min: 5,000 Pts (₹500)</span>
+          <span className="text-[10px] text-slate-400">Min: 5,000 SnapPoints (₹500)</span>
         </button>
 
         {/* UPI Reward Card */}
@@ -191,7 +191,7 @@ export const WithdrawPage: React.FC = () => {
             <span className="text-emerald-600 font-black text-2xl tracking-wider">UPI</span>
           </div>
           <span className="text-xs font-bold text-slate-800">UPI Bank Payout</span>
-          <span className="text-[10px] text-slate-400">Min: 5,000 Pts (₹500)</span>
+          <span className="text-[10px] text-slate-400">Min: 5,000 SnapPoints (₹500)</span>
         </button>
       </div>
 
@@ -200,7 +200,7 @@ export const WithdrawPage: React.FC = () => {
         {/* Amount Slider / Presets */}
         <div className="space-y-2">
           <label className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
-            Select Points to Redeem
+            Select SnapPoints to Redeem
           </label>
           <div className="grid grid-cols-3 gap-2">
             {[5000, 10000, 20000].map(amt => (
@@ -214,7 +214,7 @@ export const WithdrawPage: React.FC = () => {
                     : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                 }`}
               >
-                {amt.toLocaleString()} Pts = ₹{amt / 10}
+                {amt.toLocaleString()} SnapPoints = ₹{amt / 10}
               </button>
             ))}
           </div>
@@ -376,8 +376,8 @@ export const WithdrawPage: React.FC = () => {
             <ShoppingCart className="w-4 h-4" />
             <span>
               {user.points >= pointsToWithdraw
-                ? `Redeem ${pointsToWithdraw.toLocaleString()} gp (INR ${pointsToWithdraw / 10})`
-                : `Need ${(pointsToWithdraw - user.points).toLocaleString()} gp to Cashout`}
+                ? `Redeem ${pointsToWithdraw.toLocaleString()} sp (INR ${pointsToWithdraw / 10})`
+                : `Need ${(pointsToWithdraw - user.points).toLocaleString()} sp to Cashout`}
             </span>
           </button>
         </form>
