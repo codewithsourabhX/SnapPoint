@@ -55,11 +55,18 @@ export const SurveysPage: React.FC = () => {
       script.type = "text/javascript";
       script.async = true;
 
+      // 6-second timeout fallback to clear loading spinner if script gets silently blocked
+      const timeoutId = setTimeout(() => {
+        setLoading(false);
+      }, 6000);
+
       script.onload = () => {
+        clearTimeout(timeoutId);
         setLoading(false);
       };
 
       script.onerror = () => {
+        clearTimeout(timeoutId);
         setLoading(false);
         setAdBlockDetected(true);
       };
@@ -67,6 +74,7 @@ export const SurveysPage: React.FC = () => {
       document.body.appendChild(script);
 
       return () => {
+        clearTimeout(timeoutId);
         if (document.body.contains(script)) {
           document.body.removeChild(script);
         }
