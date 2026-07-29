@@ -22,7 +22,7 @@ export const LandingPage: React.FC = () => {
   const [openFaqId, setOpenFaqId] = useState<string | null>('faq-1');
 
   return (
-    <div className="min-h-screen bg-amber-50/30 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-amber-500 selection:text-slate-950">
+    <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-amber-500 selection:text-slate-950">
       {/* Hero Section */}
       <section className="relative pt-16 pb-24 overflow-hidden">
         {/* Animated Flying Bees */}
@@ -52,7 +52,7 @@ export const LandingPage: React.FC = () => {
             transition={{ delay: 0.2 }}
             className="mt-6 text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed"
           >
-            Complete surveys and daily activities to collect points and redeem exciting rewards.
+            Complete surveys to collect points and redeem exciting rewards. Sign up today to get 500 welcome bonus points instantly!
           </motion.p>
 
           {/* CTA Buttons */}
@@ -66,7 +66,7 @@ export const LandingPage: React.FC = () => {
               onClick={() => setCurrentPage('signup')}
               className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-base shadow-xl shadow-amber-500/20 transition-all flex items-center justify-center gap-2 group active:scale-95"
             >
-              <span>Sign Up to Start Earning</span>
+              <span>Sign Up for 500 Bonus Points</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
 

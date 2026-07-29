@@ -2,16 +2,15 @@ export type PageView =
   | 'landing'
   | 'signup'
   | 'login'
-  | 'dashboard'
   | 'surveys'
-  | 'referrals'
+  | 'games'
+  | 'tasks'
+  | 'withdraw'
   | 'profile'
-  | 'notifications'
+  | 'admin'
   | 'help'
   | 'terms'
-  | 'privacy'
-  | 'admin'
-  | 'withdraw';
+  | 'privacy';
 
 export interface UserProfile {
   uid?: string;

@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import {
-  Wallet,
   Building2,
   Send,
   CheckCircle2,
   XCircle,
-  Coins,
-  ShieldCheck,
   AlertCircle,
-  ArrowLeft,
   Clock,
-  Sparkles,
   Lock,
-  X,
-  CreditCard
+  CreditCard,
+  ShoppingCart,
+  SlidersHorizontal,
+  Search
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 export const WithdrawPage: React.FC = () => {
-  const { user, requestDetailedWithdrawal, setCurrentPage, withdrawalTransactions, refreshUserPayouts } = useApp();
+  const { user, requestDetailedWithdrawal, withdrawalTransactions, refreshUserPayouts } = useApp();
 
   useEffect(() => {
     refreshUserPayouts();
@@ -41,10 +37,11 @@ export const WithdrawPage: React.FC = () => {
 
   // Amount state
   const [pointsToWithdraw, setPointsToWithdraw] = useState<number>(5000);
-
   const [formError, setFormError] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const targetGoal = 5000;
+  const pointsNeeded = Math.max(0, targetGoal - user.points);
   const progressPercent = Math.min(100, Math.round((user.points / targetGoal) * 100));
 
   const handleWithdrawSubmit = (e: React.FormEvent) => {
@@ -99,146 +96,113 @@ export const WithdrawPage: React.FC = () => {
     }
   };
 
+  // Filter withdrawal transactions by search query
+  const filteredTxns = withdrawalTransactions.filter(tx => 
+    tx.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    tx.method.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    tx.status.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      {/* Header & Back Button */}
-      <div className="flex items-center justify-between">
-        <button
-          onClick={() => setCurrentPage('surveys')}
-          className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold transition-all"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Surveys</span>
-        </button>
-
-        <div className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/20">
-          <ShieldCheck className="w-4 h-4" />
-          <span>Secure Encrypted Cashout</span>
+    <div className="p-4 space-y-5 bg-slate-50 min-h-screen pb-24">
+      {/* Progress & Balance Overview Card */}
+      <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+        <div className="text-center font-bold text-slate-800 text-xs">
+          {pointsNeeded > 0 ? (
+            <span>You need <strong className="text-rose-600 font-extrabold">{pointsNeeded.toLocaleString()}</strong> gp to redeem your first reward!</span>
+          ) : (
+            <span className="text-emerald-600 font-extrabold">You have enough points to redeem your reward! 🎉</span>
+          )}
         </div>
-      </div>
-
-      {/* Progress & Balance Overview */}
-      <div className="p-6 rounded-2xl bg-slate-900 dark:bg-slate-950 border border-slate-800 text-white shadow-md space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight">Withdraw Money</h1>
-            <p className="text-xs text-slate-400 mt-1">
-              Transfer your earned PollBee points directly to your UPI bank account or PayPal wallet.
-            </p>
-          </div>
-          <div className="flex items-center gap-3 bg-slate-800/80 px-4 py-2.5 rounded-xl border border-slate-700">
-            <Coins className="w-5 h-5 text-amber-500" />
-            <div>
-              <p className="text-[10px] text-slate-400 uppercase font-bold">Your Balance</p>
-              <p className="text-sm font-extrabold text-amber-400">
-                {user.points.toLocaleString()} Pts (₹{user.balanceInRupees})
-              </p>
+        
+        <div className="flex items-center gap-3">
+          {/* Progress track */}
+          <div className="flex-1 relative h-6 bg-slate-100 rounded-full p-1 overflow-hidden">
+            <div 
+              className="h-full rounded-full bg-slate-900 transition-all duration-500 flex items-center pl-3"
+              style={{ width: `${Math.max(12, progressPercent)}%` }}
+            >
+              <span className="text-[10px] font-black text-white leading-none">{user.points}</span>
             </div>
           </div>
-        </div>
-
-        {/* 5000 Pts Progress Bar */}
-        <div className="space-y-2 pt-2 border-t border-slate-800/80">
-          <div className="flex justify-between items-center text-xs">
-            <span className="text-slate-300 font-medium">Cashout Goal Progress</span>
-            <span className="font-bold text-amber-400">
-              {user.points.toLocaleString()} / 5,000 Points ({progressPercent}%)
-            </span>
-          </div>
-          <div className="w-full h-3 rounded-full bg-slate-800 overflow-hidden p-0.5">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 transition-all duration-500"
-              style={{ width: `${progressPercent}%` }}
-            />
+          <div className="p-1.5 rounded-full bg-slate-100 border border-slate-200 text-slate-700">
+            <ShoppingCart className="w-4 h-4" />
           </div>
         </div>
       </div>
 
-      {/* Method Selection & Form */}
-      <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
-        <div>
-          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3">
-            Select Payout Method
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* UPI Option */}
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedMethod('UPI');
-                setFormError('');
-              }}
-              className={`p-4 rounded-xl border text-left transition-all flex items-start gap-3.5 relative overflow-hidden ${
-                selectedMethod === 'UPI'
-                  ? 'border-amber-500 bg-amber-500/10 ring-2 ring-amber-500/20'
-                  : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30'
-              }`}
-            >
-              <div
-                className={`p-3 rounded-xl ${
-                  selectedMethod === 'UPI'
-                    ? 'bg-amber-500 text-slate-950 font-black'
-                    : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
-                }`}
-              >
-                <Building2 className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-base font-extrabold text-slate-900 dark:text-white">UPI / Bank Transfer</h3>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                    Instant
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  Direct payout to GPay, PhonePe, Paytm or any Indian Bank Account.
-                </p>
-              </div>
-            </button>
+      {/* PRO TIP box */}
+      <div className="p-5 rounded-2xl bg-sky-500/5 border border-dashed border-sky-400/50 text-xs text-sky-800 space-y-2.5">
+        <div className="flex items-center gap-2 font-extrabold text-sky-600 uppercase tracking-wider">
+          <span className="text-base">💡</span>
+          <span>PRO TIP</span>
+        </div>
+        <p className="leading-relaxed font-medium">
+          PollBee offers quick and secure payouts via UPI and PayPal. Once you reach 5,000 points (equivalent to ₹500), you can request a withdrawal and start enjoying your earnings!
+        </p>
+      </div>
 
-            {/* PayPal Option */}
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedMethod('PayPal');
-                setFormError('');
-              }}
-              className={`p-4 rounded-xl border text-left transition-all flex items-start gap-3.5 relative overflow-hidden ${
-                selectedMethod === 'PayPal'
-                  ? 'border-blue-500 bg-blue-500/10 ring-2 ring-blue-500/20'
-                  : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30'
-              }`}
-            >
-              <div
-                className={`p-3 rounded-xl ${
-                  selectedMethod === 'PayPal'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
-                }`}
-              >
-                <Send className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-base font-extrabold text-slate-900 dark:text-white">PayPal Cash</h3>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400">
-                    Global
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  International cash payout directly to your verified PayPal email.
-                </p>
-              </div>
-            </button>
-          </div>
+      {/* Reward Section Header */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-extrabold text-slate-950 tracking-tight">Rewards</h2>
+          <button className="p-2 rounded-xl bg-white border border-slate-200 text-slate-700 shadow-xs">
+            <SlidersHorizontal className="w-4 h-4" />
+          </button>
         </div>
 
-        {/* Withdrawal Amount Selection */}
-        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
-          <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
+        {/* Search Box */}
+        <div className="relative">
+          <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
+          <input
+            type="text"
+            placeholder="Search a reward"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2.5 text-xs rounded-xl border border-slate-200/80 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
+          />
+        </div>
+      </div>
+
+      {/* PayPal & UPI Large Visual Selection Cards */}
+      <div className="grid grid-cols-2 gap-4">
+        {/* PayPal Reward Card */}
+        <button
+          onClick={() => setSelectedMethod('PayPal')}
+          className={`p-5 rounded-2xl border text-center transition-all bg-white shadow-xs flex flex-col items-center justify-center gap-3 relative ${
+            selectedMethod === 'PayPal' ? 'ring-2 ring-rose-500 border-rose-500' : 'border-slate-200/80'
+          }`}
+        >
+          <div className="h-10 flex items-center justify-center">
+            <span className="text-blue-600 font-black text-xl italic tracking-tighter">Pay<span className="text-cyan-500">Pal</span></span>
+          </div>
+          <span className="text-xs font-bold text-slate-800">PayPal Cashout</span>
+          <span className="text-[10px] text-slate-400">Min: 5,000 Pts (₹500)</span>
+        </button>
+
+        {/* UPI Reward Card */}
+        <button
+          onClick={() => setSelectedMethod('UPI')}
+          className={`p-5 rounded-2xl border text-center transition-all bg-white shadow-xs flex flex-col items-center justify-center gap-3 relative ${
+            selectedMethod === 'UPI' ? 'ring-2 ring-rose-500 border-rose-500' : 'border-slate-200/80'
+          }`}
+        >
+          <div className="h-10 flex items-center justify-center">
+            <span className="text-emerald-600 font-black text-2xl tracking-wider">UPI</span>
+          </div>
+          <span className="text-xs font-bold text-slate-800">UPI Bank Payout</span>
+          <span className="text-[10px] text-slate-400">Min: 5,000 Pts (₹500)</span>
+        </button>
+      </div>
+
+      {/* Payout Details Forms */}
+      <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-5">
+        {/* Amount Slider / Presets */}
+        <div className="space-y-2">
+          <label className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
             Select Points to Redeem
           </label>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             {[5000, 10000, 20000].map(amt => (
               <button
                 key={amt}
@@ -246,8 +210,8 @@ export const WithdrawPage: React.FC = () => {
                 onClick={() => setPointsToWithdraw(amt)}
                 className={`py-2 px-3 rounded-lg border text-xs font-bold transition-all ${
                   pointsToWithdraw === amt
-                    ? 'border-amber-500 bg-amber-500 text-slate-950 shadow-xs'
-                    : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+                    ? 'border-rose-500 bg-rose-500 text-white shadow-xs'
+                    : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                 }`}
               >
                 {amt.toLocaleString()} Pts = ₹{amt / 10}
@@ -256,21 +220,21 @@ export const WithdrawPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Dynamic Form depending on method */}
+        {/* Details Form fields */}
         <form onSubmit={handleWithdrawSubmit} className="space-y-4">
-          <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/60 space-y-4">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Lock className="w-4 h-4 text-amber-500" />
+          <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-4">
+            <h3 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+              <Lock className="w-4 h-4 text-rose-500" />
               <span>Enter {selectedMethod} Receiving Details</span>
             </h3>
 
             {selectedMethod === 'UPI' ? (
-              <div className="space-y-4">
-                {/* First and Last Name */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-3.5 text-xs">
+                {/* Name */}
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      First Name <span className="text-red-500">*</span>
+                    <label className="block text-[10px] font-bold text-slate-600 mb-1">
+                      First Name *
                     </label>
                     <input
                       type="text"
@@ -278,13 +242,12 @@ export const WithdrawPage: React.FC = () => {
                       placeholder="e.g. Rahul"
                       value={upiFirstName}
                       onChange={e => setUpiFirstName(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
                     />
                   </div>
-
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Last Name <span className="text-red-500">*</span>
+                    <label className="block text-[10px] font-bold text-slate-600 mb-1">
+                      Last Name *
                     </label>
                     <input
                       type="text"
@@ -292,15 +255,15 @@ export const WithdrawPage: React.FC = () => {
                       placeholder="e.g. Sharma"
                       value={upiLastName}
                       onChange={e => setUpiLastName(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
                     />
                   </div>
                 </div>
 
                 {/* UPI ID */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                    UPI ID <span className="text-red-500">*</span>
+                  <label className="block text-[10px] font-bold text-slate-600 mb-1">
+                    UPI ID *
                   </label>
                   <input
                     type="text"
@@ -308,30 +271,30 @@ export const WithdrawPage: React.FC = () => {
                     placeholder="e.g. 9876543210@ybl or name@okaxis"
                     value={upiId}
                     onChange={e => setUpiId(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
                   />
                 </div>
 
                 {/* Bank Name */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                    Bank Name <span className="text-red-500">*</span>
+                  <label className="block text-[10px] font-bold text-slate-600 mb-1">
+                    Bank Name *
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. State Bank of India / HDFC Bank"
+                    placeholder="e.g. State Bank of India"
                     value={bankName}
                     onChange={e => setBankName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
                   />
                 </div>
 
-                {/* IFSC Code & Account No */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Account Details */}
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      IFSC Code <span className="text-red-500">*</span>
+                    <label className="block text-[10px] font-bold text-slate-600 mb-1">
+                      IFSC Code *
                     </label>
                     <input
                       type="text"
@@ -339,31 +302,30 @@ export const WithdrawPage: React.FC = () => {
                       placeholder="e.g. SBIN0001234"
                       value={ifscCode}
                       onChange={e => setIfscCode(e.target.value.toUpperCase())}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 uppercase tracking-wider"
+                      className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500 uppercase tracking-wider"
                     />
                   </div>
-
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Account No. <span className="text-red-500">*</span>
+                    <label className="block text-[10px] font-bold text-slate-600 mb-1">
+                      Account No *
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="e.g. 123456789012"
+                      placeholder="e.g. 12345678901"
                       value={accountNo}
                       onChange={e => setAccountNo(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
                     />
                   </div>
                 </div>
               </div>
             ) : (
               /* PayPal Form */
-              <div className="space-y-4">
+              <div className="space-y-3.5 text-xs">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                    Full Name <span className="text-red-500">*</span>
+                  <label className="block text-[10px] font-bold text-slate-600 mb-1">
+                    Full Name *
                   </label>
                   <input
                     type="text"
@@ -371,13 +333,13 @@ export const WithdrawPage: React.FC = () => {
                     placeholder="e.g. Rahul Sharma"
                     value={paypalName}
                     onChange={e => setPaypalName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                    PayPal Email Address <span className="text-red-500">*</span>
+                  <label className="block text-[10px] font-bold text-slate-600 mb-1">
+                    PayPal Email Address *
                   </label>
                   <input
                     type="email"
@@ -385,7 +347,7 @@ export const WithdrawPage: React.FC = () => {
                     placeholder="e.g. user@paypal.com"
                     value={paypalEmail}
                     onChange={e => setPaypalEmail(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
                   />
                 </div>
               </div>
@@ -393,7 +355,7 @@ export const WithdrawPage: React.FC = () => {
           </div>
 
           {formError && (
-            <div className="flex items-center gap-2 p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs font-bold">
+            <div className="flex items-center gap-2 p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-600 text-xs font-bold">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{formError}</span>
             </div>
@@ -403,91 +365,78 @@ export const WithdrawPage: React.FC = () => {
           <button
             type="submit"
             disabled={user.points < pointsToWithdraw}
-            className={`w-full py-3.5 px-6 rounded-xl font-extrabold text-sm transition-all shadow-md flex items-center justify-center gap-2 ${
+            className={`w-full py-3 px-4 rounded-xl font-extrabold text-xs transition-all shadow-xs flex items-center justify-center gap-2 ${
               user.points >= pointsToWithdraw
                 ? selectedMethod === 'UPI'
-                  ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 active:scale-98'
-                  : 'bg-blue-600 hover:bg-blue-500 text-white active:scale-98'
-                : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
+                  ? 'bg-slate-900 hover:bg-slate-800 text-white active:scale-98'
+                  : 'bg-rose-600 hover:bg-rose-500 text-white active:scale-98'
+                : 'bg-slate-200 text-slate-400 cursor-not-allowed'
             }`}
           >
-            <Wallet className="w-4 h-4" />
+            <ShoppingCart className="w-4 h-4" />
             <span>
               {user.points >= pointsToWithdraw
-                ? `Withdraw ${pointsToWithdraw.toLocaleString()} Points (₹${pointsToWithdraw / 10})`
-                : `Need ${(pointsToWithdraw - user.points).toLocaleString()} More Points to Cashout`}
+                ? `Redeem ${pointsToWithdraw.toLocaleString()} gp (INR ${pointsToWithdraw / 10})`
+                : `Need ${(pointsToWithdraw - user.points).toLocaleString()} gp to Cashout`}
             </span>
           </button>
         </form>
       </div>
 
-      {/* Withdrawal History & Live Status */}
-      <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-          <h2 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <CreditCard className="w-4 h-4 text-amber-500" />
-            <span>Withdrawal History & Live Status</span>
+      {/* Withdrawal History List */}
+      <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+            <CreditCard className="w-4 h-4 text-rose-500" />
+            <span>Withdrawal History</span>
           </h2>
           <span className="text-xs font-semibold text-slate-500">
-            Total Requests: {withdrawalTransactions.length}
+            Total: {filteredTxns.length}
           </span>
         </div>
 
-        {withdrawalTransactions.length === 0 ? (
-          <div className="p-6 text-center text-xs text-slate-500">
-            You haven't submitted any withdrawal requests yet.
+        {filteredTxns.length === 0 ? (
+          <div className="py-6 text-center text-xs text-slate-500">
+            No withdrawal records found.
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-100 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
-                <tr>
-                  <th className="p-3">Request ID & Date</th>
-                  <th className="p-3">Method & Details</th>
-                  <th className="p-3">Amount</th>
-                  <th className="p-3 text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-800 dark:text-slate-200">
-                {withdrawalTransactions.map(tx => (
-                  <tr key={tx.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-                    <td className="p-3 font-semibold">
-                      <div className="text-slate-900 dark:text-white">#{tx.id}</div>
-                      <div className="text-[10px] text-slate-400">{tx.date}</div>
-                    </td>
-                    <td className="p-3">
-                      <div className="font-bold text-amber-600 dark:text-amber-400">{tx.method}</div>
-                      <div className="text-[11px] text-slate-500">{tx.accountDetail}</div>
-                    </td>
-                    <td className="p-3">
-                      <div className="font-extrabold text-slate-900 dark:text-white">₹{tx.amountInRupees}</div>
-                      <div className="text-[10px] text-slate-400">{tx.amountInPoints.toLocaleString()} Pts</div>
-                    </td>
-                    <td className="p-3 text-right">
-                      {(tx.status === 'Completed' || tx.status === 'Approved') && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[11px]">
-                          <CheckCircle2 className="w-3.5 h-3.5" /> Completed
-                        </span>
-                      )}
-                      {tx.status === 'Pending' && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold text-[11px]">
-                          <Clock className="w-3.5 h-3.5 animate-pulse" /> Pending
-                        </span>
-                      )}
-                      {tx.status === 'Rejected' && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold text-[11px]">
-                          <XCircle className="w-3.5 h-3.5" /> Rejected
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="space-y-3.5">
+            {filteredTxns.map(tx => (
+              <div key={tx.id} className="p-3.5 rounded-xl border border-slate-100 bg-slate-50/50 flex items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-extrabold text-xs text-slate-900">#{tx.id}</span>
+                    <span className="px-1.5 py-0.2 rounded bg-slate-200 text-slate-700 text-[9px] font-bold uppercase">{tx.method}</span>
+                  </div>
+                  <div className="text-[10px] text-slate-400 font-medium">{tx.date}</div>
+                  <div className="text-[11px] text-slate-500 leading-tight truncate max-w-[200px]">{tx.accountDetail}</div>
+                </div>
+
+                <div className="text-right space-y-1.5 shrink-0">
+                  <div className="font-extrabold text-xs text-slate-900">₹{tx.amountInRupees}</div>
+                  <div>
+                    {(tx.status === 'Completed' || tx.status === 'Approved') && (
+                      <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 text-[10px] font-bold border border-emerald-500/20">
+                        Completed
+                      </span>
+                    )}
+                    {tx.status === 'Pending' && (
+                      <span className="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 text-[10px] font-bold border border-amber-500/20">
+                        Pending
+                      </span>
+                    )}
+                    {tx.status === 'Rejected' && (
+                      <span className="px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-600 text-[10px] font-bold border border-rose-500/20">
+                        Rejected
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
-
-      </div>
+    </div>
   );
 };

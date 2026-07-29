@@ -1,35 +1,46 @@
 import React, { useState } from 'react';
-import { User, Mail, Phone, Globe, Lock, Bell, Shield, Save, CheckCircle2, AlertCircle } from 'lucide-react';
+import {
+  User,
+  Users,
+  Clock,
+  Lock,
+  LogOut,
+  ShieldCheck,
+  ChevronRight,
+  ArrowLeft,
+  Save,
+  Copy,
+  Check,
+} from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { auth } from '../../lib/firebase';
-import { updatePassword } from 'firebase/auth';
+import { signOut, updatePassword } from 'firebase/auth';
 
 export const ProfilePage: React.FC = () => {
-  const { user, setUser, addToast } = useApp();
+  const { user, setUser, addToast, setCurrentPage, withdrawalTransactions } = useApp();
 
+  const [activeSection, setActiveSection] = useState<'menu' | 'about' | 'referrals' | 'history' | 'password'>('menu');
+
+  // About Me Form State
   const [name, setName] = useState(user.name);
-  const [email, setEmail] = useState(user.email);
-  const [phone, setPhone] = useState(user.phone || '+91 98765 43210');
   const [country, setCountry] = useState(user.country || 'India');
 
-  const [currentPassword, setCurrentPassword] = useState('');
+  // Password Form State
   const [newPassword, setNewPassword] = useState('');
   const [passwordLoading, setPasswordLoading] = useState(false);
-  const isGoogleUser = auth.currentUser?.providerData.some(p => p.providerId === 'google.com');
 
-  // Notification Preferences State
-  const [surveyAlerts, setSurveyAlerts] = useState(true);
-  const [payoutAlerts, setPayoutAlerts] = useState(true);
-  const [referralAlerts, setReferralAlerts] = useState(true);
-  const [dailyBonusAlerts, setDailyBonusAlerts] = useState(true);
+  // Referrals State
+  const [copiedCode, setCopiedCode] = useState(false);
+
+  const isGoogleUser = auth.currentUser?.providerData.some(p => p.providerId === 'google.com');
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     setUser(prev => {
-      const updated = { ...prev, name, email, phone, country };
+      const updated = { ...prev, name, country };
       if (prev.uid) {
         import('../../lib/firebase').then(({ doc, db, updateDoc }) => {
-          updateDoc(doc(db, 'users', prev.uid!), { name, email, phone, country }).catch(err => console.error(err));
+          updateDoc(doc(db, 'users', prev.uid!), { name, country }).catch(err => console.error(err));
         });
       }
       return updated;
@@ -39,6 +50,7 @@ export const ProfilePage: React.FC = () => {
       message: 'Your personal information has been saved.',
       type: 'success'
     });
+    setActiveSection('menu');
   };
 
   const handleChangePassword = async (e: React.FormEvent) => {
@@ -62,8 +74,8 @@ export const ProfilePage: React.FC = () => {
         message: 'Your account security credentials have been updated.',
         type: 'success'
       });
-      setCurrentPassword('');
       setNewPassword('');
+      setActiveSection('menu');
     } catch (err: any) {
       console.error('Password change error:', err);
       let errMsg = err.message || 'Failed to update password.';
@@ -80,197 +92,353 @@ export const ProfilePage: React.FC = () => {
     }
   };
 
-  return (
-    <div className="space-y-8 max-w-4xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center gap-4 p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 border-l-4 border-l-indigo-600 shadow-xs">
-        <div className="w-14 h-14 rounded-xl bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 font-extrabold flex items-center justify-center text-2xl ring-2 ring-indigo-500 shrink-0">
-          {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(user.referralCode);
+    setCopiedCode(true);
+    addToast({
+      title: 'Referral Code Copied!',
+      message: `Code ${user.referralCode} copied to clipboard.`,
+      type: 'success'
+    });
+    setTimeout(() => setCopiedCode(false), 2500);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setCurrentPage('landing');
+    } catch (e) {
+      console.error('Logout error:', e);
+    }
+  };
+
+  // 1. Menu List View (Main)
+  if (activeSection === 'menu') {
+    return (
+      <div className="p-4 space-y-6 bg-slate-50 min-h-screen pb-24 text-slate-800">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center gap-4 relative">
+          <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-2xl border border-slate-200 shrink-0 select-none">
+            {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+          </div>
+          <div className="space-y-0.5">
+            <h2 className="text-base font-extrabold text-slate-900 tracking-tight">Hi, {user.name}!</h2>
+            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+              USER ID: {user.uid ? user.uid.substring(0, 8).toUpperCase() : 'N/A'}
+            </div>
+          </div>
         </div>
-        <div>
-          <h1 className="text-lg font-bold text-slate-900 dark:text-white">{user.name}</h1>
-          <p className="text-xs text-slate-400">{user.email}</p>
-          <span className="inline-block mt-1 px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-500 text-[10px] font-bold">
-            PollBee Verified Member
-          </span>
-        </div>
-      </div>
 
-      {/* Form Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Personal Info Form */}
-        <div className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 border-l-4 border-l-indigo-500 shadow-xs space-y-4">
-          <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <User className="w-4 h-4 text-indigo-500" />
-            <span>Personal Information</span>
-          </h2>
-
-          <form onSubmit={handleSaveProfile} className="space-y-4 text-xs">
-            <div>
-              <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                Full Name
-              </label>
-              <input
-                type="text"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-            </div>
-
-            <div>
-              <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                Email Address (Cannot be changed)
-              </label>
-              <input
-                type="email"
-                value={email}
-                disabled
-                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800/30 text-slate-500 cursor-not-allowed focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                Country / Region
-              </label>
-              <input
-                type="text"
-                value={country}
-                onChange={e => setCountry(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-            </div>
+        <div className="space-y-2">
+          <h3 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-1">
+            My Account
+          </h3>
+          <div className="rounded-2xl border border-slate-200/80 bg-white overflow-hidden shadow-xs divide-y divide-slate-100">
+            <button
+              onClick={() => setActiveSection('about')}
+              className="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <User className="w-4 h-4 text-slate-700" />
+                <span className="text-xs font-bold text-slate-800">About Me</span>
+              </div>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </button>
 
             <button
-              type="submit"
-              className="w-full py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition-all shadow-xs flex items-center justify-center gap-2"
+              onClick={() => setActiveSection('referrals')}
+              className="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors"
             >
-              <Save className="w-4 h-4" />
-              <span>Save Personal Info</span>
-            </button>
-          </form>
-        </div>
-
-        {/* Change Password & Connected Accounts */}
-        <div className="space-y-6">
-          {/* Change Password */}
-          <div className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 border-l-4 border-l-purple-500 shadow-xs space-y-4">
-            <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Lock className="w-4 h-4 text-purple-500" />
-              <span>Change Password</span>
-            </h2>
-
-            {isGoogleUser ? (
-              <div className="p-3.5 rounded-xl bg-amber-500/10 dark:bg-slate-800 border border-amber-500/20 text-xs font-bold text-amber-800 dark:text-amber-400 flex items-start gap-2.5">
-                <AlertCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-                <span>You are signed in with Google. Password management and security are handled directly through your Google Account.</span>
+              <div className="flex items-center gap-3">
+                <Users className="w-4 h-4 text-slate-700" />
+                <span className="text-xs font-bold text-slate-800">Referrals</span>
               </div>
-            ) : (
-              <form onSubmit={handleChangePassword} className="space-y-3 text-xs">
-                <div>
-                  <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    New Password
-                  </label>
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={e => setNewPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </button>
 
-                <button
-                  type="submit"
-                  disabled={passwordLoading}
-                  className="w-full py-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold transition-all shadow-xs flex items-center justify-center gap-2 disabled:opacity-60"
-                >
-                  {passwordLoading ? 'Updating Password...' : 'Update Password'}
-                </button>
-              </form>
+            <button
+              onClick={() => setActiveSection('history')}
+              className="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <Clock className="w-4 h-4 text-slate-700" />
+                <span className="text-xs font-bold text-slate-800">History</span>
+              </div>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </button>
+
+            {!isGoogleUser && (
+              <button
+                onClick={() => setActiveSection('password')}
+                className="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  <Lock className="w-4 h-4 text-slate-700" />
+                  <span className="text-xs font-bold text-slate-800">Change Password</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400" />
+              </button>
             )}
           </div>
+        </div>
 
-          {/* Connected Accounts */}
-          <div className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 border-l-4 border-l-emerald-500 shadow-xs space-y-3">
-            <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Shield className="w-4 h-4 text-emerald-500" />
-              <span>Connected Accounts</span>
-            </h2>
+        <div className="space-y-2">
+          <h3 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-1">
+            Others
+          </h3>
+          <div className="rounded-2xl border border-slate-200/80 bg-white overflow-hidden shadow-xs divide-y divide-slate-100">
+            {(user.isAdmin || user.email === 'yadavsourabh8585@gmail.com') && (
+              <button
+                onClick={() => setCurrentPage('admin')}
+                className="w-full p-4 flex items-center justify-between text-left hover:bg-amber-50/50 transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  <ShieldCheck className="w-4 h-4 text-amber-500 font-extrabold" />
+                  <span className="text-xs font-extrabold text-slate-800">Admin Control Panel</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400" />
+              </button>
+            )}
 
-            <div className="space-y-2 text-xs">
-              <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/40 flex items-center justify-between">
-                <span className="font-semibold text-slate-800 dark:text-slate-200">Google Account</span>
-                <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">Connected</span>
+            <button
+              onClick={handleLogout}
+              className="w-full p-4 flex items-center justify-between text-left hover:bg-rose-50/50 transition-colors text-rose-600"
+            >
+              <div className="flex items-center gap-3">
+                <LogOut className="w-4 h-4 text-rose-500" />
+                <span className="text-xs font-bold">Log Out</span>
               </div>
-
-            </div>
+              <ChevronRight className="w-4 h-4 text-rose-400" />
+            </button>
           </div>
         </div>
       </div>
+    );
+  }
 
-      {/* Notification Preferences Section */}
-      <div className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
-        <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-          <Bell className="w-4 h-4 text-amber-500" />
-          <span>Notification Preferences</span>
-        </h2>
+  // 2. About Me Section
+  if (activeSection === 'about') {
+    return (
+      <div className="p-4 space-y-5 bg-slate-50 min-h-screen pb-24 text-slate-800">
+        <button
+          onClick={() => setActiveSection('menu')}
+          className="flex items-center gap-1.5 text-xs font-bold text-slate-600 active:scale-95 transition-all"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to Menu</span>
+        </button>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-          <label className="flex items-center justify-between p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/40 cursor-pointer">
-            <div>
-              <p className="font-bold text-slate-900 dark:text-white">Survey Alerts</p>
-              <p className="text-[11px] text-slate-400">Notifications when new high-paying surveys open</p>
-            </div>
+        <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">About Me</h2>
+
+        <form onSubmit={handleSaveProfile} className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4 text-xs">
+          <div>
+            <label className="block font-bold text-slate-600 mb-1">Full Name</label>
             <input
-              type="checkbox"
-              checked={surveyAlerts}
-              onChange={() => setSurveyAlerts(!surveyAlerts)}
-              className="w-4 h-4 accent-indigo-600 rounded cursor-pointer"
+              type="text"
+              required
+              value={name}
+              onChange={e => setName(e.target.value)}
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-950 focus:outline-none focus:ring-2 focus:ring-rose-500 font-semibold"
             />
-          </label>
+          </div>
 
-          <label className="flex items-center justify-between p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/40 cursor-pointer">
-            <div>
-              <p className="font-bold text-slate-900 dark:text-white">Payout Updates</p>
-              <p className="text-[11px] text-slate-400">Withdrawal status change notifications</p>
-            </div>
+          <div>
+            <label className="block font-bold text-slate-600 mb-1">Email Address (Cannot be changed)</label>
             <input
-              type="checkbox"
-              checked={payoutAlerts}
-              onChange={() => setPayoutAlerts(!payoutAlerts)}
-              className="w-4 h-4 accent-indigo-600 rounded cursor-pointer"
+              type="email"
+              value={user.email}
+              disabled
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-100 text-slate-400 cursor-not-allowed focus:outline-none font-semibold"
             />
-          </label>
+          </div>
 
-          <label className="flex items-center justify-between p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/40 cursor-pointer">
-            <div>
-              <p className="font-bold text-slate-900 dark:text-white">Referral Joins</p>
-              <p className="text-[11px] text-slate-400">Alerts when friends sign up using your link</p>
-            </div>
+          <div>
+            <label className="block font-bold text-slate-600 mb-1">Country / Region</label>
             <input
-              type="checkbox"
-              checked={referralAlerts}
-              onChange={() => setReferralAlerts(!referralAlerts)}
-              className="w-4 h-4 accent-indigo-600 rounded cursor-pointer"
+              type="text"
+              required
+              value={country}
+              onChange={e => setCountry(e.target.value)}
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-950 focus:outline-none focus:ring-2 focus:ring-rose-500 font-semibold"
             />
-          </label>
+          </div>
 
-          <label className="flex items-center justify-between p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/40 cursor-pointer">
+          <button
+            type="submit"
+            className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold transition-all shadow-xs flex items-center justify-center gap-2"
+          >
+            <Save className="w-4 h-4" />
+            <span>Save Profile</span>
+          </button>
+        </form>
+      </div>
+    );
+  }
+
+  // 3. Referrals Section
+  if (activeSection === 'referrals') {
+    return (
+      <div className="p-4 space-y-5 bg-slate-50 min-h-screen pb-24 text-slate-800">
+        <button
+          onClick={() => setActiveSection('menu')}
+          className="flex items-center gap-1.5 text-xs font-bold text-slate-600 active:scale-95 transition-all"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to Menu</span>
+        </button>
+
+        <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">Referrals</h2>
+
+        <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1.5">
+          <span className="text-[9px] px-2 py-0.5 rounded bg-rose-500/10 text-rose-600 font-extrabold uppercase tracking-wider">
+            Earn 10% Commission
+          </span>
+          <h3 className="text-sm font-extrabold text-slate-900">Invite Friends & Earn Points</h3>
+          <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
+            Get instant starter bonus points when your friends sign up, plus a 10% lifetime commission on all survey earnings!
+          </p>
+        </div>
+
+        <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+          <div className="flex flex-col gap-3">
             <div>
-              <p className="font-bold text-slate-900 dark:text-white">Daily Streak Reminders</p>
-              <p className="text-[11px] text-slate-400">Daily reminder to claim your bonus streak</p>
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                Your Referral Code
+              </label>
+              <p className="text-[11px] text-slate-500 mt-0.5">
+                Friends enter this code during sign up to get 500 welcome points.
+              </p>
             </div>
-            <input
-              type="checkbox"
-              checked={dailyBonusAlerts}
-              onChange={() => setDailyBonusAlerts(!dailyBonusAlerts)}
-              className="w-4 h-4 accent-indigo-600 rounded cursor-pointer"
-            />
-          </label>
+            
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between font-mono font-extrabold text-lg tracking-widest text-slate-900">
+              <span>{user.referralCode}</span>
+              <button
+                onClick={handleCopyCode}
+                className="p-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-slate-900"
+              >
+                {copiedCode ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-3 text-center">
+          <div className="p-3 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+            <span className="text-[10px] font-bold text-slate-400 block uppercase">Total</span>
+            <span className="text-base font-extrabold text-slate-900 block mt-0.5">{user.totalReferrals || 0}</span>
+            <span className="text-[9px] text-slate-400 block mt-0.5">Friends</span>
+          </div>
+          <div className="p-3 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+            <span className="text-[10px] font-bold text-slate-400 block uppercase">Active</span>
+            <span className="text-base font-extrabold text-emerald-600 block mt-0.5">{user.activeReferrals || 0}</span>
+            <span className="text-[9px] text-slate-400 block mt-0.5">Earners</span>
+          </div>
+          <div className="p-3 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+            <span className="text-[10px] font-bold text-slate-400 block uppercase">Income</span>
+            <span className="text-base font-extrabold text-rose-500 block mt-0.5">₹{user.referralEarningsInRupees || 0}</span>
+            <span className="text-[9px] text-slate-400 block mt-0.5">Earned</span>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  // 4. History Section
+  if (activeSection === 'history') {
+    return (
+      <div className="p-4 space-y-5 bg-slate-50 min-h-screen pb-24 text-slate-800">
+        <button
+          onClick={() => setActiveSection('menu')}
+          className="flex items-center gap-1.5 text-xs font-bold text-slate-600 active:scale-95 transition-all"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to Menu</span>
+        </button>
+
+        <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">Withdrawal History</h2>
+
+        {withdrawalTransactions.length === 0 ? (
+          <div className="p-6 rounded-2xl bg-white border border-slate-200 text-center text-xs text-slate-500">
+            You haven't requested any payouts yet.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {withdrawalTransactions.map(tx => (
+              <div key={tx.id} className="p-4 bg-white rounded-2xl border border-slate-200/80 flex items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-extrabold text-xs text-slate-900">#{tx.id}</span>
+                    <span className="px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 text-[9px] font-extrabold uppercase">{tx.method}</span>
+                  </div>
+                  <div className="text-[10px] text-slate-400 font-medium">{tx.date}</div>
+                  <div className="text-[11px] text-slate-500 truncate max-w-[180px] font-medium">{tx.accountDetail}</div>
+                </div>
+
+                <div className="text-right space-y-1.5 shrink-0">
+                  <div className="font-extrabold text-xs text-slate-900">₹{tx.amountInRupees}</div>
+                  <div>
+                    {(tx.status === 'Completed' || tx.status === 'Approved') && (
+                      <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 text-[10px] font-bold border border-emerald-500/20">
+                        Completed
+                      </span>
+                    )}
+                    {tx.status === 'Pending' && (
+                      <span className="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 text-[10px] font-bold border border-amber-500/20">
+                        Pending
+                      </span>
+                    )}
+                    {tx.status === 'Rejected' && (
+                      <span className="px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-600 text-[10px] font-bold border border-rose-500/20">
+                        Rejected
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // 5. Password Update Section
+  if (activeSection === 'password') {
+    return (
+      <div className="p-4 space-y-5 bg-slate-50 min-h-screen pb-24 text-slate-800">
+        <button
+          onClick={() => setActiveSection('menu')}
+          className="flex items-center gap-1.5 text-xs font-bold text-slate-600 active:scale-95 transition-all"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to Menu</span>
+        </button>
+
+        <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">Change Password</h2>
+
+        <form onSubmit={handleChangePassword} className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4 text-xs">
+          <div>
+            <label className="block font-bold text-slate-600 mb-1">New Password</label>
+            <input
+              type="password"
+              required
+              placeholder="Min. 6 characters"
+              value={newPassword}
+              onChange={e => setNewPassword(e.target.value)}
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-950 focus:outline-none focus:ring-2 focus:ring-rose-500 font-semibold"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={passwordLoading}
+            className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold transition-all shadow-xs flex items-center justify-center gap-2"
+          >
+            <span>{passwordLoading ? 'Updating Password...' : 'Update Password'}</span>
+          </button>
+        </form>
+      </div>
+    );
+  }
+
+  return null;
 };

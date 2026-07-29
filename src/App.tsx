@@ -1,10 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AppProvider, useApp } from './context/AppContext';
-import { Navbar } from './components/common/Navbar';
-import { Sidebar } from './components/common/Sidebar';
 import { MobileBottomNav } from './components/common/MobileBottomNav';
-import { Footer } from './components/common/Footer';
 import { ToastContainer } from './components/common/ToastContainer';
 import { CheckCircle2, X, Clock } from 'lucide-react';
 
@@ -12,11 +9,10 @@ import { CheckCircle2, X, Clock } from 'lucide-react';
 import { LandingPage } from './components/landing/LandingPage';
 import { SignUpPage } from './components/auth/SignUpPage';
 import { LoginPage } from './components/auth/LoginPage';
-import { DashboardPage } from './components/dashboard/DashboardPage';
 import { SurveysPage } from './components/surveys/SurveysPage';
-import { ReferralsPage } from './components/referral/ReferralsPage';
+import { GamesPage } from './components/games/GamesPage';
+import { TasksPage } from './components/tasks/TasksPage';
 import { ProfilePage } from './components/profile/ProfilePage';
-import { NotificationsPage } from './components/notifications/NotificationsPage';
 import { HelpCenterPage } from './components/help/HelpCenterPage';
 import { TermsPage } from './components/help/TermsPage';
 import { PrivacyPage } from './components/help/PrivacyPage';
@@ -25,19 +21,22 @@ import { WithdrawPage } from './components/withdraw/WithdrawPage';
 import { VerifyEmailPage } from './components/auth/VerifyEmailPage';
 
 const AppContent: React.FC = () => {
-  const { currentPage, activeModal, closeModal, setCurrentPage, unverifiedEmail, reloadAndCheckVerification } = useApp();
+  const { currentPage, activeModal, closeModal, setCurrentPage, unverifiedEmail, reloadAndCheckVerification, user } = useApp();
 
   if (unverifiedEmail) {
     return (
       <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors font-sans antialiased">
-        <Navbar />
+        <header className="bg-slate-950 text-white px-4 py-3.5 flex items-center justify-between border-b border-slate-900 sticky top-0 z-40 select-none">
+          <div className="flex items-center gap-2">
+            <span className="font-extrabold text-sm tracking-tight">PollBee</span>
+          </div>
+        </header>
         <main className="flex-1 flex items-center justify-center p-4">
           <VerifyEmailPage
             email={unverifiedEmail}
             onVerified={reloadAndCheckVerification}
           />
         </main>
-        <Footer />
         <ToastContainer />
       </div>
     );
@@ -56,16 +55,14 @@ const AppContent: React.FC = () => {
         return <SignUpPage />;
       case 'login':
         return <LoginPage />;
-      case 'dashboard':
-        return <DashboardPage />;
       case 'surveys':
         return <SurveysPage />;
-      case 'referrals':
-        return <ReferralsPage />;
+      case 'games':
+        return <GamesPage />;
+      case 'tasks':
+        return <TasksPage />;
       case 'profile':
         return <ProfilePage />;
-      case 'notifications':
-        return <NotificationsPage />;
       case 'admin':
         return <AdminPage />;
       case 'withdraw':
@@ -77,51 +74,44 @@ const AppContent: React.FC = () => {
       case 'help':
         return <HelpCenterPage />;
       default:
-        return <DashboardPage />;
+        return <SurveysPage />;
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors font-sans antialiased">
-      {/* Top Navbar */}
-      <Navbar />
+      {/* Dark Top Header (Authenticated users only) */}
+      {!isPublicPage && (
+        <header className="bg-slate-950 text-white px-4 py-3.5 flex items-center justify-between border-b border-slate-900 sticky top-0 z-40 select-none">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-amber-500 to-yellow-400 flex items-center justify-center text-slate-950 font-black text-sm">
+              B
+            </div>
+            <span className="font-extrabold text-sm tracking-tight">PollBee</span>
+          </div>
+          
+          <div className="px-3.5 py-1.5 rounded-full bg-rose-600 text-white font-bold text-[11px] flex items-center gap-1.5 shadow-sm shadow-rose-600/20 active:scale-95 transition-all">
+            <span>{(user.points || 0).toLocaleString()} gp</span>
+            <span className="opacity-70">≈</span>
+            <span>INR {(user.balanceInRupees || 0).toLocaleString()}</span>
+          </div>
+        </header>
+      )}
 
       {/* Main View Layout */}
-      {isPublicPage ? (
-        <main className="flex-1">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentPage}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
-            >
-              {renderPage()}
-            </motion.div>
-          </AnimatePresence>
-        </main>
-      ) : (
-        <div className="flex-1 max-w-7xl w-full mx-auto flex">
-          {/* Dashboard Sidebar */}
-          <Sidebar />
-
-          {/* Page Content View */}
-          <main className="flex-1 p-3.5 sm:p-6 lg:p-8 min-w-0 pb-20 md:pb-8">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentPage}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.2 }}
-              >
-                {renderPage()}
-              </motion.div>
-            </AnimatePresence>
-          </main>
-        </div>
-      )}
+      <main className="flex-1 pb-20 overflow-y-auto">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentPage}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            {renderPage()}
+          </motion.div>
+        </AnimatePresence>
+      </main>
 
       {/* Mobile Bottom Navigation Bar */}
       <MobileBottomNav />
@@ -129,7 +119,7 @@ const AppContent: React.FC = () => {
       {/* Global Payout Confirmation Modal */}
       {activeModal?.type === 'payout-success' && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
-          <div className="relative w-full max-w-md p-6 rounded-2xl bg-white dark:bg-slate-900 border border-amber-200 dark:border-slate-800 shadow-2xl text-center space-y-4">
+          <div className="relative w-full max-w-md p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl text-center space-y-4">
             <button
               onClick={closeModal}
               className="absolute right-4 top-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
@@ -169,9 +159,6 @@ const AppContent: React.FC = () => {
         </div>
       )}
 
-      {/* Footer */}
-      <Footer />
-
       {/* Global Toast Stack */}
       <ToastContainer />
     </div>
@@ -184,5 +171,5 @@ export default function App() {
       <AppContent />
     </AppProvider>
   );
-};
+}
 
