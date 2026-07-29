@@ -91,11 +91,11 @@ export const VerifyEmailPage: React.FC<VerifyEmailPageProps> = ({ email, onVerif
         animate={{ opacity: 1, scale: 1, y: 0 }}
         className="max-w-md w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-center"
       >
-        <div className="relative mx-auto w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-400 flex items-center justify-center text-slate-950 font-bold shadow-xl shadow-amber-500/20">
-          <Mail className="w-8 h-8 text-slate-950" />
+        <div className="relative mx-auto w-16 h-16 rounded-2xl bg-gradient-to-tr from-rose-500 to-rose-600 flex items-center justify-center text-white shadow-xl shadow-rose-500/20">
+          <Mail className="w-8 h-8 text-white" />
           <span className="absolute -top-1 -right-1 flex h-4 w-4">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-amber-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-450 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-4 w-4 bg-rose-500"></span>
           </span>
         </div>
 
@@ -106,13 +106,13 @@ export const VerifyEmailPage: React.FC<VerifyEmailPageProps> = ({ email, onVerif
           <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
             A verification link has been sent to:
           </p>
-          <div className="inline-block px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 font-extrabold text-xs">
+          <div className="inline-block px-3.5 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-700 dark:text-rose-400 font-extrabold text-xs">
             {email}
           </div>
           
           {/* Prominent Spam Warning Banner */}
-          <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-800 dark:text-amber-300 font-bold text-xs flex items-center justify-center gap-2 shadow-xs">
-            <AlertCircle className="w-4 h-4 text-amber-500 shrink-0" />
+          <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-800 dark:text-rose-300 font-bold text-xs flex items-center justify-center gap-2 shadow-xs">
+            <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
             <span>Please check your inbox &amp; spam folder if you do not see the email.</span>
           </div>
         </div>
@@ -121,7 +121,7 @@ export const VerifyEmailPage: React.FC<VerifyEmailPageProps> = ({ email, onVerif
           <button
             onClick={handleCheckVerification}
             disabled={checking}
-            className="w-full py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow-xl shadow-amber-500/20 transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-60"
+            className="w-full py-3.5 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs shadow-xl shadow-rose-600/20 transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-60 cursor-pointer"
           >
             {checking ? (
               <>

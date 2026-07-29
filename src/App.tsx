@@ -28,7 +28,8 @@ const AppContent: React.FC = () => {
       <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors font-sans antialiased">
         <header className="bg-slate-950 text-white px-4 py-3.5 flex items-center justify-between border-b border-slate-900 sticky top-0 z-40 select-none">
           <div className="flex items-center gap-2">
-            <span className="font-extrabold text-sm tracking-tight">PollBee</span>
+            <img src="/logo.png" alt="Logo" className="w-7 h-7 object-contain rounded-md" />
+            <span className="font-extrabold text-sm tracking-tight">SnapPoint</span>
           </div>
         </header>
         <main className="flex-1 flex items-center justify-center p-4">
@@ -84,10 +85,8 @@ const AppContent: React.FC = () => {
       {!isPublicPage && (
         <header className="bg-slate-950 text-white px-4 py-3.5 flex items-center justify-between border-b border-slate-900 sticky top-0 z-40 select-none">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-amber-500 to-yellow-400 flex items-center justify-center text-slate-950 font-black text-sm">
-              B
-            </div>
-            <span className="font-extrabold text-sm tracking-tight">PollBee</span>
+            <img src="/logo.png" alt="Logo" className="w-7 h-7 object-contain rounded-md" />
+            <span className="font-extrabold text-sm tracking-tight">SnapPoint</span>
           </div>
           
           <div className="px-3.5 py-1.5 rounded-full bg-rose-600 text-white font-bold text-[11px] flex items-center gap-1.5 shadow-sm shadow-rose-600/20 active:scale-95 transition-all">

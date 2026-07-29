@@ -106,7 +106,7 @@ export const SurveysPage: React.FC = () => {
           <span>PRO TIP</span>
         </div>
         <p className="leading-relaxed font-medium">
-          To earn more from PollBee paid surveys, stay honest, don't rush your responses, and avoid giving fake information. If you don't qualify for one survey, keep trying—your genuine participation pays off!
+          To earn more from SnapPoint paid surveys, stay honest, don't rush your responses, and avoid giving fake information. If you don't qualify for one survey, keep trying—your genuine participation pays off!
         </p>
       </div>
 
@@ -129,7 +129,7 @@ export const SurveysPage: React.FC = () => {
           </div>
           <h3 className="text-base font-bold">Ad Blocker Detected</h3>
           <p className="text-xs text-slate-600 leading-relaxed">
-            We noticed that your browser is blocking our survey provider. To load surveys and earn reward points, please disable your ad blocker (e.g. AdBlock, uBlock, or Brave Shield) for PollBee.
+            We noticed that your browser is blocking our survey provider. To load surveys and earn reward points, please disable your ad blocker (e.g. AdBlock, uBlock, or Brave Shield) for SnapPoint.
           </p>
         </div>
       )}

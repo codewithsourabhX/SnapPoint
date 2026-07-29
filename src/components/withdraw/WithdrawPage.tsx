@@ -138,7 +138,7 @@ export const WithdrawPage: React.FC = () => {
           <span>PRO TIP</span>
         </div>
         <p className="leading-relaxed font-medium">
-          PollBee offers quick and secure payouts via UPI and PayPal. Once you reach 5,000 points (equivalent to ₹500), you can request a withdrawal and start enjoying your earnings!
+          SnapPoint offers quick and secure payouts via UPI and PayPal. Once you reach 5,000 points (equivalent to ₹500), you can request a withdrawal and start enjoying your earnings!
         </p>
       </div>
 

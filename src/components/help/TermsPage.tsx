@@ -26,8 +26,8 @@ export const TermsPage: React.FC = () => {
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
               Terms of Use & Conditions
             </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Pollbee • Delhi, India
+             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              SnapPoint • Delhi, India
             </p>
           </div>
         </div>
@@ -38,9 +38,9 @@ export const TermsPage: React.FC = () => {
             <h2 className="font-extrabold text-slate-900 dark:text-white text-base">
               1. Scope of the Terms of Use
             </h2>
-            <p>The following terms and conditions govern your use of the Services provided by Hey Cash AB.</p>
-            <p><strong>1.1.</strong> The provider is Pollbee , delhi , India.</p>
-            <p><strong>1.2.</strong> The Provider operates Pollbee ("Platform"), that enables you and other registered users ("Members") to participate in product testing assignments arranged between you and external advertising partners ("Tasks"). These Tasks may include online surveys, product tests, app tests, and website tests. By actively participating in and fulfilling these Tasks in accordance with the following provisions, you may earn remuneration or other benefits.</p>
+            <p>The following terms and conditions govern your use of the Services provided by SnapPoint.</p>
+            <p><strong>1.1.</strong> The provider is SnapPoint , Delhi , India.</p>
+            <p><strong>1.2.</strong> The Provider operates SnapPoint ("Platform"), that enables you and other registered users ("Members") to participate in product testing assignments arranged between you and external advertising partners ("Tasks"). These Tasks may include online surveys, product tests, app tests, and website tests. By actively participating in and fulfilling these Tasks in accordance with the following provisions, you may earn remuneration or other benefits.</p>
             <p><strong>1.3.</strong> These services offered by the Provider ("Services") through the Platform are accessible via the internet through both a mobile application ("Mobile App") and a browser-based application ("Web App"; the Mobile App and Web App are collectively referred to as the "App").</p>
             <p><strong>1.4.</strong> These Terms of Use are a binding legal contract between Provider and "you", and govern your access to and use of the Services.</p>
             <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-slate-800 dark:text-slate-200 my-2">
@@ -226,7 +226,7 @@ export const TermsPage: React.FC = () => {
               11. Privacy
             </h2>
             <p>Provider's privacy practices are described in the Privacy Notice.</p>
-            <p>When processing your personal information, Provider shall comply with the applicable privacy and data protection legislation. Information on how Provider uses and processes information that you submit in connection with the Services can be found in Provider's Privacy Notice for the Services, available at <a href="https://www.pollbee.online/policy" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 font-bold hover:underline">https://www.pollbee.online/policy</a>. The Privacy Notice is hereby incorporated by reference.</p>
+            <p>When processing your personal information, Provider shall comply with the applicable privacy and data protection legislation. Information on how Provider uses and processes information that you submit in connection with the Services can be found in Provider's Privacy Notice for the Services, available at <a href="https://www.snappoint.online/policy" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 font-bold hover:underline">https://www.snappoint.online/policy</a>. The Privacy Notice is hereby incorporated by reference.</p>
           </section>
 
           {/* Section 12 */}

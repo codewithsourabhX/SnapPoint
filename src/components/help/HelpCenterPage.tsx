@@ -50,10 +50,10 @@ export const HelpCenterPage: React.FC = () => {
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
       {/* Header */}
-      <div className="p-6 rounded-2xl bg-slate-900 dark:bg-slate-950 border border-slate-800 border-l-4 border-l-indigo-600 text-white shadow-xs">
+      <div className="p-6 rounded-2xl bg-slate-900 dark:bg-slate-950 border border-slate-800 border-l-4 border-l-rose-600 text-white shadow-xs">
         <div className="max-w-xl">
-          <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold uppercase tracking-wider">
-            EarnPulse Support
+          <span className="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-xs font-bold uppercase tracking-wider">
+            SnapPoint Support
           </span>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mt-2">
             Help Center & Support
@@ -70,7 +70,7 @@ export const HelpCenterPage: React.FC = () => {
           onClick={() => setActiveTab('faq')}
           className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
             activeTab === 'faq'
-              ? 'bg-indigo-600 text-white shadow-xs'
+              ? 'bg-rose-600 text-white shadow-xs'
               : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
@@ -81,7 +81,7 @@ export const HelpCenterPage: React.FC = () => {
           onClick={() => setActiveTab('support')}
           className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
             activeTab === 'support'
-              ? 'bg-indigo-600 text-white shadow-xs'
+              ? 'bg-rose-600 text-white shadow-xs'
               : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
@@ -92,7 +92,7 @@ export const HelpCenterPage: React.FC = () => {
           onClick={() => setActiveTab('terms')}
           className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
             activeTab === 'terms'
-              ? 'bg-indigo-600 text-white shadow-xs'
+              ? 'bg-rose-600 text-white shadow-xs'
               : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
@@ -103,7 +103,7 @@ export const HelpCenterPage: React.FC = () => {
           onClick={() => setActiveTab('privacy')}
           className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
             activeTab === 'privacy'
-              ? 'bg-indigo-600 text-white shadow-xs'
+              ? 'bg-rose-600 text-white shadow-xs'
               : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
@@ -244,15 +244,15 @@ export const HelpCenterPage: React.FC = () => {
 
       {/* TAB 3: Terms */}
       {activeTab === 'terms' && (
-        <div className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 border-l-4 border-l-indigo-500 shadow-xs space-y-4 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        <div className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-500 shadow-xs space-y-4 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
           <h2 className="text-base font-bold text-slate-900 dark:text-white">
-            EarnPulse Terms of Service
+            SnapPoint Terms of Service
           </h2>
           <p>
             1. User Accounts: Each individual is allowed strictly one account. Multiple account creations or proxy/VPN usage to manipulate survey qualification rules is strictly prohibited and subject to account forfeiture.
           </p>
           <p>
-            2. Reward Points & Conversions: EarnPulse Points carry no monetary value outside the EarnPulse platform until explicitly submitted for redemption. Conversion rates (5,000 Points = ₹500) are enforced automatically.
+            2. Reward Points & Conversions: SnapPoint Points carry no monetary value outside the SnapPoint platform until explicitly submitted for redemption. Conversion rates (5,000 Points = ₹500) are enforced automatically.
           </p>
           <p>
             3. Payout Processing: Approved redemptions are transmitted electronically via UPI, Amazon Gift Cards, Flipkart Vouchers, or PayPal. Delivery timeframes typically range from 1 to 24 hours.
@@ -262,7 +262,7 @@ export const HelpCenterPage: React.FC = () => {
 
       {/* TAB 4: Privacy */}
       {activeTab === 'privacy' && (
-        <div className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 border-l-4 border-l-indigo-500 shadow-xs space-y-4 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        <div className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-500 shadow-xs space-y-4 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
           <h2 className="text-base font-bold text-slate-900 dark:text-white">
             Privacy Policy & Data Security
           </h2>

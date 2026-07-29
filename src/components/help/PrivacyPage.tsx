@@ -26,8 +26,8 @@ export const PrivacyPage: React.FC = () => {
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
               Privacy Policy & Governance
             </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Pollbee • Delhi, India (https://www.pollbee.online/policy)
+             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              SnapPoint • Delhi, India (https://www.snappoint.online/policy)
             </p>
           </div>
         </div>
@@ -38,7 +38,7 @@ export const PrivacyPage: React.FC = () => {
               Privacy Notice & Data Processing
             </h2>
             <p>
-              When processing your personal information, Pollbee ("Provider", located in Delhi, India) complies with applicable privacy and data protection legislation. Information on how Provider uses and processes information submitted in connection with our Services is incorporated into these terms and available at <a href="https://www.pollbee.online/policy" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 font-bold hover:underline">https://www.pollbee.online/policy</a>.
+              When processing your personal information, SnapPoint ("Provider", located in Delhi, India) complies with applicable privacy and data protection legislation. Information on how Provider uses and processes information submitted in connection with our Services is incorporated into these terms and available at <a href="https://www.snappoint.online/policy" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 font-bold hover:underline">https://www.snappoint.online/policy</a>.
             </p>
           </section>
 

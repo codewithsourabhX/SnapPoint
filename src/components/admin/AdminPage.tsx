@@ -78,8 +78,8 @@ export const AdminPage: React.FC = () => {
             completedSurveysCount: 22,
             pendingRewardsInRupees: 500,
             referralEarningsInRupees: 320,
-            referralCode: 'BEE881',
-            referralLink: 'https://pollbee.com/ref/BEE881',
+            referralCode: 'SNAP881',
+            referralLink: 'https://snappoint.online/ref/SNAP881',
             totalReferrals: 5,
             activeReferrals: 3,
             currentStreak: 7
@@ -92,8 +92,8 @@ export const AdminPage: React.FC = () => {
             completedSurveysCount: 15,
             pendingRewardsInRupees: 750,
             referralEarningsInRupees: 150,
-            referralCode: 'BEE402',
-            referralLink: 'https://pollbee.com/ref/BEE402',
+            referralCode: 'SNAP402',
+            referralLink: 'https://snappoint.online/ref/SNAP402',
             totalReferrals: 2,
             activeReferrals: 2,
             currentStreak: 12
@@ -166,7 +166,7 @@ export const AdminPage: React.FC = () => {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl sm:text-2xl font-extrabold text-amber-400 tracking-tight">
-                PollBee Admin Control Panel
+                SnapPoint Admin Control Panel
               </h1>
               <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
                 MASTER ADMIN
@@ -276,7 +276,7 @@ export const AdminPage: React.FC = () => {
                     {filteredPayouts.map(tx => (
                       <tr key={tx.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
                         <td className="p-3.5">
-                          <div className="font-bold text-slate-900 dark:text-white">{tx.userName || 'PollBee Member'}</div>
+                          <div className="font-bold text-slate-900 dark:text-white">{tx.userName || 'SnapPoint Member'}</div>
                           <div className="text-[11px] text-slate-500">{tx.userEmail || tx.accountDetail}</div>
                           <div className="text-[10px] text-slate-400 mt-0.5">{tx.date} • ID: #{tx.id}</div>
                         </td>
@@ -393,7 +393,7 @@ export const AdminPage: React.FC = () => {
           <div className="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 flex items-center justify-between">
             <h2 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
               <Users className="w-4 h-4 text-amber-500" />
-              <span>Registered PollBee Users & Stats</span>
+              <span>Registered SnapPoint Users & Stats</span>
             </h2>
             <span className="text-xs font-semibold text-slate-500">
               Total Users: {filteredUsers.length}

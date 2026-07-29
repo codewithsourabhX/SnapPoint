@@ -4,7 +4,7 @@ export const INITIAL_FAQS: FAQItem[] = [
   {
     id: 'faq-1',
     question: 'How do points translate into real currency?',
-    answer: 'Every 10 PollBee Points equals ₹1 (or equivalent local currency). For example, 5,000 Points can be instantly redeemed for ₹500 via UPI, Amazon Gift Cards, Flipkart Vouchers, or PayPal Cash.',
+    answer: 'Every 10 SnapPoint Points equals ₹1 (or equivalent local currency). For example, 5,000 Points can be instantly redeemed for ₹500 via UPI, Amazon Gift Cards, Flipkart Vouchers, or PayPal Cash.',
     category: 'General'
   },
   {

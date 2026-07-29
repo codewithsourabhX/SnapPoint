@@ -153,13 +153,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             setUser({
               ...data,
               uid: authUser.uid,
-              name: data.name || authUser.displayName || 'PollBee Member',
+              name: data.name || authUser.displayName || 'SnapPoint Member',
               email: authUser.email || data.email,
               isAdmin: isAdminUser
             });
             setGoogleAuthPending(null);
             if (currentPageRef.current === 'login' || currentPageRef.current === 'signup' || currentPageRef.current === 'landing') {
-              setCurrentPage('dashboard');
+              setCurrentPage('surveys');
             }
           } else {
             // New user detected without completed profile in Firestore (e.g. Google Sign In)
@@ -266,11 +266,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setGoogleAuthPending(null);
     addToast({
       title: 'Registration Complete! 🎉',
-      message: 'Welcome to PollBee! 500 Welcome Points credited to your account.',
+      message: 'Welcome to SnapPoint! 500 Welcome Points credited to your account.',
       type: 'success'
     });
     triggerConfetti();
-    setCurrentPage('dashboard');
+    setCurrentPage('surveys');
   };
 
   const toggleDarkMode = () => {
@@ -322,12 +322,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             setUser({
               ...data,
               uid: auth.currentUser.uid,
-              name: data.name || auth.currentUser.displayName || 'PollBee Member',
+              name: data.name || auth.currentUser.displayName || 'SnapPoint Member',
               email: auth.currentUser.email || data.email,
               isAdmin: auth.currentUser.email === 'yadavsourabh8585@gmail.com'
             });
           }
-          setCurrentPage('dashboard');
+          setCurrentPage('surveys');
           return true;
         }
       } catch (e) {

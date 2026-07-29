@@ -86,7 +86,7 @@ export const GoogleDetailsModal: React.FC<GoogleDetailsModalProps> = ({
         pendingRewardsInRupees: 0,
         referralEarningsInRupees: 0,
         referralCode: uniqueCode,
-        referralLink: `https://pollbee.com/ref/${uniqueCode}`,
+        referralLink: `https://snappoint.online/ref/${uniqueCode}`,
         totalReferrals: 0,
         activeReferrals: 0,
         currentStreak: 1,
