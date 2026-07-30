@@ -7,8 +7,29 @@ service cloud.firestore {
       // Allow any logged-in user to read user profiles (needed for referral validation)
       allow read: if request.auth != null;
       // Allow user themselves, master admin, or unauthenticated writes (so backend CPX postbacks can update points)
-      allow write: if (request.auth != null && (request.auth.uid == userId || request.auth.token.email == 'yadavsourabh8585@gmail.com'))
+      allow create: if (request.auth != null && (request.auth.uid == userId || request.auth.token.email == 'yadavsourabh8585@gmail.com'))
         || request.auth == null;
+      allow update: if (request.auth != null && (
+        request.auth.uid == userId || 
+        request.auth.token.email == 'yadavsourabh8585@gmail.com' ||
+        (
+          request.resource.data.totalReferrals == resource.data.get('totalReferrals', 0) + 1 &&
+          request.resource.data.activeReferrals == resource.data.get('activeReferrals', 0) + 1 &&
+          (
+            (
+              request.resource.data.points == resource.data.get('points', 0) &&
+              request.resource.data.balanceInRupees == resource.data.get('balanceInRupees', 0) &&
+              request.resource.data.referralEarningsInRupees == resource.data.get('referralEarningsInRupees', 0)
+            ) ||
+            (
+              request.resource.data.points == resource.data.get('points', 0) + 250 &&
+              request.resource.data.balanceInRupees == resource.data.get('balanceInRupees', 0) + 25 &&
+              request.resource.data.referralEarningsInRupees == resource.data.get('referralEarningsInRupees', 0) + 25
+            )
+          )
+        )
+      )) || request.auth == null;
+      allow delete: if (request.auth != null && request.auth.token.email == 'yadavsourabh8585@gmail.com') || request.auth == null;
     }
     
     // Payout / Withdrawal requests
