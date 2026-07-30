@@ -476,18 +476,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return updated;
     });
 
-    const paymentDetails = {
-      upiId,
-      realFirstName,
-      realLastName,
-      bankDetails,
-      bankName,
-      ifscCode,
-      accountNo,
-      paypalEmail,
-      paypalName,
-      giftCardEmail
+    const rawPaymentDetails = {
+      upiId: upiId || null,
+      realFirstName: realFirstName || null,
+      realLastName: realLastName || null,
+      bankDetails: bankDetails || null,
+      bankName: bankName || null,
+      ifscCode: ifscCode || null,
+      accountNo: accountNo || null,
+      paypalEmail: paypalEmail || null,
+      paypalName: paypalName || null,
+      giftCardEmail: giftCardEmail || null
     };
+
+    const cleanPaymentDetails: any = {};
+    Object.keys(rawPaymentDetails).forEach(key => {
+      const val = (rawPaymentDetails as any)[key];
+      if (val !== undefined && val !== null) {
+        cleanPaymentDetails[key] = val;
+      }
+    });
 
     const newTxn: WithdrawalTransaction = {
       id: 'TXN-' + Math.floor(100000 + Math.random() * 900000),
@@ -497,27 +505,36 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       amountInPoints: amountPoints,
       amountInRupees: rupeesAmount,
       status: 'Pending',
-      userEmail: user.email,
-      userName: user.name,
-      uid: user.uid,
-      paymentDetails,
+      userEmail: user.email || '',
+      userName: user.name || '',
+      uid: user.uid || '',
+      paymentDetails: cleanPaymentDetails,
       // Retain root-level fields for backward compatibility
-      upiId,
-      realFirstName,
-      realLastName,
-      bankDetails,
-      bankName,
-      ifscCode,
-      accountNo,
-      paypalEmail,
-      paypalName,
-      giftCardEmail
+      upiId: upiId || null,
+      realFirstName: realFirstName || null,
+      realLastName: realLastName || null,
+      bankDetails: bankDetails || null,
+      bankName: bankName || null,
+      ifscCode: ifscCode || null,
+      accountNo: accountNo || null,
+      paypalEmail: paypalEmail || null,
+      paypalName: paypalName || null,
+      giftCardEmail: giftCardEmail || null
     };
 
-    setWithdrawalTransactions(prev => [newTxn, ...prev]);
+    // Clean newTxn of any undefined values
+    const cleanTxn: any = {};
+    Object.keys(newTxn).forEach(key => {
+      const val = (newTxn as any)[key];
+      if (val !== undefined && val !== null) {
+        cleanTxn[key] = val;
+      }
+    });
 
-    // Store in firestore payouts with newTxn.id as doc ID
-    setDoc(doc(db, 'payouts', newTxn.id), newTxn).catch(e => console.log('Firestore payout save:', e));
+    setWithdrawalTransactions(prev => [cleanTxn as WithdrawalTransaction, ...prev]);
+
+    // Store in firestore payouts with cleanTxn.id as doc ID
+    setDoc(doc(db, 'payouts', cleanTxn.id), cleanTxn).catch(e => console.log('Firestore payout save:', e));
 
     // Add activity log
     setActivities(prev => [
