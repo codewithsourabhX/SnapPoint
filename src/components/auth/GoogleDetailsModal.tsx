@@ -39,7 +39,7 @@ export const GoogleDetailsModal: React.FC<GoogleDetailsModalProps> = ({
       let attempts = 0;
       while (codeExists && attempts < 10) {
         attempts++;
-        uniqueCode = 'BEE' + Math.floor(100000 + Math.random() * 900000);
+        uniqueCode = 'SNAP' + Math.floor(100000 + Math.random() * 900000);
         const qCode = query(collection(db, 'users'), where('referralCode', '==', uniqueCode));
         const snapCode = await getDocs(qCode);
         if (snapCode.empty) {
@@ -61,11 +61,15 @@ export const GoogleDetailsModal: React.FC<GoogleDetailsModalProps> = ({
           referrerUid = referrerDoc.id;
           referredByCode = cleanRefInput;
 
-          // Increment referrer's stats in Firestore
+          // Increment referrer's stats and award 250 points starter bonus
           const refData = referrerDoc.data() as UserProfile;
+          const newPoints = (refData.points || 0) + 250;
           await updateDoc(doc(db, 'users', referrerUid), {
             totalReferrals: (refData.totalReferrals || 0) + 1,
-            activeReferrals: (refData.activeReferrals || 0) + 1
+            activeReferrals: (refData.activeReferrals || 0) + 1,
+            points: newPoints,
+            balanceInRupees: Math.floor(newPoints / 10),
+            referralEarningsInRupees: (refData.referralEarningsInRupees || 0) + 25
           }).catch(err => console.log('Error updating referrer doc:', err));
         } else {
           // Warning if invalid code entered
@@ -168,7 +172,7 @@ export const GoogleDetailsModal: React.FC<GoogleDetailsModalProps> = ({
                 type="text"
                 value={referralCodeInput}
                 onChange={e => setReferralCodeInput(e.target.value.toUpperCase())}
-                placeholder="e.g. BEE881234"
+                placeholder="e.g. SNAP881234"
                 className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 uppercase font-semibold tracking-wider"
               />
             </div>

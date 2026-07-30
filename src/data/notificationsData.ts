@@ -28,7 +28,7 @@ export const INITIAL_NOTIFICATIONS: NotificationItem[] = [
   {
     id: 'notif-4',
     title: 'New Referral Joined! 🎉',
-    message: 'Your friend Rahul signed up using your link BEE99. You earned 200 referral bonus points!',
+    message: 'Your friend Rahul signed up using your link SNAP99. You earned 200 referral bonus points!',
     timestamp: '2 days ago',
     type: 'referral',
     read: true
