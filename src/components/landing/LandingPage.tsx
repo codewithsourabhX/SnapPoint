@@ -101,7 +101,7 @@ export const LandingPage: React.FC = () => {
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-rose-500" />
-              <span>10% Lifetime Referral Bonus</span>
+              <span>₹25 First Referral Bonus + 10% Lifetime Commission</span>
             </div>
           </motion.div>
         </div>

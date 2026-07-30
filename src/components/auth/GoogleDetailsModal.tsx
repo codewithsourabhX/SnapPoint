@@ -61,16 +61,24 @@ export const GoogleDetailsModal: React.FC<GoogleDetailsModalProps> = ({
           referrerUid = referrerDoc.id;
           referredByCode = cleanRefInput;
 
-          // Increment referrer's stats and award 250 points starter bonus
+          // Increment stats and award 250 points starter bonus ONLY for their first referral
           const refData = referrerDoc.data() as UserProfile;
-          const newPoints = (refData.points || 0) + 250;
-          await updateDoc(doc(db, 'users', referrerUid), {
+          const isFirstReferral = (refData.totalReferrals || 0) === 0;
+          
+          const updatePayload: any = {
             totalReferrals: (refData.totalReferrals || 0) + 1,
-            activeReferrals: (refData.activeReferrals || 0) + 1,
-            points: newPoints,
-            balanceInRupees: Math.floor(newPoints / 10),
-            referralEarningsInRupees: (refData.referralEarningsInRupees || 0) + 25
-          }).catch(err => console.log('Error updating referrer doc:', err));
+            activeReferrals: (refData.activeReferrals || 0) + 1
+          };
+
+          if (isFirstReferral) {
+            const newPoints = (refData.points || 0) + 250;
+            updatePayload.points = newPoints;
+            updatePayload.balanceInRupees = Math.floor(newPoints / 10);
+            updatePayload.referralEarningsInRupees = (refData.referralEarningsInRupees || 0) + 25;
+          }
+
+          await updateDoc(doc(db, 'users', referrerUid), updatePayload)
+            .catch(err => console.log('Error updating referrer doc:', err));
         } else {
           // Warning if invalid code entered
           console.log('Referral code not found:', cleanRefInput);

@@ -28,7 +28,7 @@ export const INITIAL_FAQS: FAQItem[] = [
   {
     id: 'faq-5',
     question: 'How does the Referral Program work?',
-    answer: 'Share your unique referral code or link. You get a starter bonus when your friend registers, plus a 10% lifetime commission on all SnapPoints they earn from surveys and tasks!',
+    answer: 'Share your unique referral code or link. You get a 250 SnapPoints (₹25) starter bonus on your first referral, plus a 10% lifetime commission on all SnapPoints earned by every friend you refer!',
     category: 'Referrals'
   },
   {

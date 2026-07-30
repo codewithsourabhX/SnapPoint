@@ -290,11 +290,11 @@ export const ProfilePage: React.FC = () => {
 
         <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1.5">
           <span className="text-[9px] px-2 py-0.5 rounded bg-rose-500/10 text-rose-600 font-extrabold uppercase tracking-wider">
-            Earn 10% Commission
+            First Refer Bonus + 10% Commission
           </span>
           <h3 className="text-sm font-extrabold text-slate-900">Invite Friends & Earn SnapPoints</h3>
           <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
-            Get instant starter bonus SnapPoints when your friends sign up, plus a 10% lifetime commission on all survey earnings!
+            Get 250 SnapPoints (₹25) starter bonus on your first referral, plus a 10% lifetime commission on all survey earnings from every friend you refer!
           </p>
         </div>
 
