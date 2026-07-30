@@ -1,12 +1,12 @@
 {
-  "projectId": "pollbee",
-  "appId": "1:980656281491:web:b5b7cdcee2d7b6d02a7a66",
-  "apiKey": "AIzaSyB4m7bnVx5qZDvX1pDYiplY_kDovaK7Svk",
-  "authDomain": "pollbee.firebaseapp.com",
+  "projectId": "snappoint-5baba",
+  "appId": "1:976608408621:web:46b054cacfbf1c4312b4a4",
+  "apiKey": "AIzaSyAzzAvMQBMTvKXUNXWWYgoRHHiTlFzjyI4",
+  "authDomain": "snappoint-5baba.firebaseapp.com",
   "firestoreDatabaseId": "",
-  "storageBucket": "pollbee.firebasestorage.app",
-  "messagingSenderId": "980656281491",
-  "measurementId": "G-PDY8BN0MLN",
+  "storageBucket": "snappoint-5baba.firebasestorage.app",
+  "messagingSenderId": "976608408621",
+  "measurementId": "G-1DQ2DNRVW1",
   "oAuthClientId": "",
   "recaptchaSiteKey": ""
 }
