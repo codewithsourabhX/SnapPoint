@@ -69,6 +69,19 @@ export interface WithdrawalOption {
   description: string;
 }
 
+export interface PaymentDetails {
+  upiId?: string;
+  realFirstName?: string;
+  realLastName?: string;
+  bankDetails?: string;
+  bankName?: string;
+  ifscCode?: string;
+  accountNo?: string;
+  paypalEmail?: string;
+  paypalName?: string;
+  giftCardEmail?: string;
+}
+
 export interface WithdrawalTransaction {
   id: string;
   date: string;
@@ -76,11 +89,12 @@ export interface WithdrawalTransaction {
   accountDetail: string;
   amountInPoints: number;
   amountInRupees: number;
-  status: 'Approved' | 'Pending' | 'Rejected' | 'Completed';
+  status: 'Approved' | 'Pending' | 'Rejected' | 'Completed' | 'Declined';
   userEmail: string;
   userName: string;
   uid?: string;
-  // Specific details
+  paymentDetails?: PaymentDetails;
+  // Specific details (retained for backward compatibility)
   upiId?: string;
   realFirstName?: string;
   realLastName?: string;

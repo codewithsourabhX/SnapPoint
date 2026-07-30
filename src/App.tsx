@@ -140,7 +140,7 @@ const AppContent: React.FC = () => {
 
             <div className="p-3.5 rounded-xl bg-amber-500/10 dark:bg-slate-800 border border-amber-500/30 text-xs font-bold text-amber-800 dark:text-amber-300 flex items-center justify-center gap-2">
               <Clock className="w-4 h-4 text-amber-500 shrink-0" />
-              <span>Your request is submitted and you will get your reward in the next 48 hours.</span>
+              <span>Your request is submitted and you will get your reward in 48 working hours.</span>
             </div>
 
             <div className="pt-2 flex gap-3">

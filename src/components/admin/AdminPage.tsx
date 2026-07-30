@@ -111,7 +111,7 @@ export const AdminPage: React.FC = () => {
     fetchData();
   }, [withdrawalTransactions]);
 
-  const handleUpdatePayoutStatus = async (id: string, newStatus: 'Pending' | 'Completed' | 'Approved' | 'Rejected') => {
+  const handleUpdatePayoutStatus = async (id: string, newStatus: 'Pending' | 'Completed' | 'Approved' | 'Rejected' | 'Declined') => {
     try {
       // Merge status update into Firestore payouts collection
       const payoutRef = doc(db, 'payouts', id);
@@ -290,29 +290,29 @@ export const AdminPage: React.FC = () => {
                         <td className="p-3.5 max-w-xs space-y-1">
                           {tx.method === 'UPI' && (
                             <div className="text-[11px] space-y-1">
-                              <div><span className="text-slate-400">UPI ID:</span> <strong className="text-amber-500 font-extrabold">{tx.upiId || tx.accountDetail}</strong></div>
-                              {(tx.realFirstName || tx.realLastName) && (
-                                <div><span className="text-slate-400">Holder:</span> <strong className="text-slate-900 dark:text-white">{tx.realFirstName} {tx.realLastName}</strong></div>
+                              <div><span className="text-slate-400">UPI ID:</span> <strong className="text-amber-500 font-extrabold">{tx.paymentDetails?.upiId || tx.upiId || tx.accountDetail}</strong></div>
+                              {(tx.paymentDetails?.realFirstName || tx.paymentDetails?.realLastName || tx.realFirstName || tx.realLastName) && (
+                                <div><span className="text-slate-400">Holder:</span> <strong className="text-slate-900 dark:text-white">{tx.paymentDetails?.realFirstName || tx.realFirstName} {tx.paymentDetails?.realLastName || tx.realLastName}</strong></div>
                               )}
-                              {tx.bankName && <div><span className="text-slate-400">Bank:</span> {tx.bankName}</div>}
-                              {tx.accountNo && <div><span className="text-slate-400">A/C No:</span> {tx.accountNo}</div>}
-                              {tx.ifscCode && <div><span className="text-slate-400">IFSC:</span> {tx.ifscCode}</div>}
-                              {!tx.bankName && tx.bankDetails && (
-                                <div className="text-[10px] text-slate-400 border-t border-slate-200/50 dark:border-slate-800 pt-0.5 mt-0.5">{tx.bankDetails}</div>
+                              {(tx.paymentDetails?.bankName || tx.bankName) && <div><span className="text-slate-400">Bank:</span> {tx.paymentDetails?.bankName || tx.bankName}</div>}
+                              {(tx.paymentDetails?.accountNo || tx.accountNo) && <div><span className="text-slate-400">A/C No:</span> {tx.paymentDetails?.accountNo || tx.accountNo}</div>}
+                              {(tx.paymentDetails?.ifscCode || tx.ifscCode) && <div><span className="text-slate-400">IFSC:</span> {tx.paymentDetails?.ifscCode || tx.ifscCode}</div>}
+                              {!(tx.paymentDetails?.bankName || tx.bankName) && (tx.paymentDetails?.bankDetails || tx.bankDetails) && (
+                                <div className="text-[10px] text-slate-400 border-t border-slate-200/50 dark:border-slate-800 pt-0.5 mt-0.5">{tx.paymentDetails?.bankDetails || tx.bankDetails}</div>
                               )}
                             </div>
                           )}
 
                           {tx.method === 'PayPal' && (
                             <div className="text-[11px] space-y-1">
-                              <div><span className="text-slate-400">PayPal Email:</span> <strong className="text-amber-500 font-extrabold">{tx.paypalEmail || tx.accountDetail}</strong></div>
-                              {tx.paypalName && <div><span className="text-slate-400">Account Name:</span> <strong className="text-slate-900 dark:text-white">{tx.paypalName}</strong></div>}
+                              <div><span className="text-slate-400">PayPal Email:</span> <strong className="text-amber-500 font-extrabold">{tx.paymentDetails?.paypalEmail || tx.paypalEmail || tx.accountDetail}</strong></div>
+                              {(tx.paymentDetails?.paypalName || tx.paypalName) && <div><span className="text-slate-400">Account Name:</span> <strong className="text-slate-900 dark:text-white">{tx.paymentDetails?.paypalName || tx.paypalName}</strong></div>}
                             </div>
                           )}
 
                           {(tx.method === 'Amazon' || tx.method === 'Flipkart') && (
                             <div className="text-[11px]">
-                              <div><span className="text-slate-400">Email:</span> <strong>{tx.giftCardEmail || tx.accountDetail}</strong></div>
+                              <div><span className="text-slate-400">Email:</span> <strong>{tx.paymentDetails?.giftCardEmail || tx.giftCardEmail || tx.accountDetail}</strong></div>
                             </div>
                           )}
                         </td>
@@ -333,9 +333,9 @@ export const AdminPage: React.FC = () => {
                               <Clock className="w-3.5 h-3.5 animate-pulse" /> Pending
                             </span>
                           )}
-                          {tx.status === 'Rejected' && (
+                          {(tx.status === 'Rejected' || tx.status === 'Declined') && (
                             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[11px] font-bold border border-rose-500/20">
-                              <XCircle className="w-3.5 h-3.5" /> Rejected
+                              <XCircle className="w-3.5 h-3.5" /> Declined
                             </span>
                           )}
                         </td>
@@ -365,15 +365,15 @@ export const AdminPage: React.FC = () => {
                               Completed
                             </button>
                             <button
-                              onClick={() => handleUpdatePayoutStatus(tx.id, 'Rejected')}
-                              disabled={tx.status === 'Rejected'}
+                              onClick={() => handleUpdatePayoutStatus(tx.id, 'Declined')}
+                              disabled={tx.status === 'Rejected' || tx.status === 'Declined'}
                               className={`px-2.5 py-1 rounded-lg font-bold text-[11px] transition-all active:scale-95 ${
-                                tx.status === 'Rejected'
+                                tx.status === 'Rejected' || tx.status === 'Declined'
                                   ? 'bg-rose-600 text-white cursor-default opacity-80'
                                   : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-rose-600 hover:text-white'
                               }`}
                             >
-                              Rejected
+                              Declined
                             </button>
                           </div>
                         </td>

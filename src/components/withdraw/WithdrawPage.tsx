@@ -65,6 +65,9 @@ export const WithdrawPage: React.FC = () => {
         realFirstName: upiFirstName.trim(),
         realLastName: upiLastName.trim(),
         upiId: upiId.trim(),
+        bankName: bankName.trim(),
+        ifscCode: ifscCode.trim(),
+        accountNo: accountNo.trim(),
         bankDetails: `Bank: ${bankName.trim()} | A/C: ${accountNo.trim()} | IFSC: ${ifscCode.trim()}`
       });
 
@@ -425,9 +428,9 @@ export const WithdrawPage: React.FC = () => {
                         Pending
                       </span>
                     )}
-                    {tx.status === 'Rejected' && (
+                    {(tx.status === 'Rejected' || tx.status === 'Declined') && (
                       <span className="px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-600 text-[10px] font-bold border border-rose-500/20">
-                        Rejected
+                        Declined
                       </span>
                     )}
                   </div>

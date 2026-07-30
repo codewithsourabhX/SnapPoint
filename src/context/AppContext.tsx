@@ -476,6 +476,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return updated;
     });
 
+    const paymentDetails = {
+      upiId,
+      realFirstName,
+      realLastName,
+      bankDetails,
+      bankName,
+      ifscCode,
+      accountNo,
+      paypalEmail,
+      paypalName,
+      giftCardEmail
+    };
+
     const newTxn: WithdrawalTransaction = {
       id: 'TXN-' + Math.floor(100000 + Math.random() * 900000),
       date: new Date().toISOString().slice(0, 16).replace('T', ' '),
@@ -487,6 +500,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       userEmail: user.email,
       userName: user.name,
       uid: user.uid,
+      paymentDetails,
+      // Retain root-level fields for backward compatibility
       upiId,
       realFirstName,
       realLastName,
@@ -515,6 +530,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       },
       ...prev
     ]);
+
+    // Success Toast Notification
+    addToast({
+      title: 'Withdrawal Submitted! 🎉',
+      message: 'Your request is submitted and you will get your reward in 48 working hours.',
+      type: 'success'
+    });
 
     // Open confirmation popup
     openModal('payout-success', {
