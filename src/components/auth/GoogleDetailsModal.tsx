@@ -91,8 +91,8 @@ export const GoogleDetailsModal: React.FC<GoogleDetailsModalProps> = ({
         activeReferrals: 0,
         currentStreak: 1,
         isAdmin: isAdminUser,
-        referredBy: referrerUid,
-        referredByCode: referredByCode,
+        referredBy: referrerUid || null,
+        referredByCode: referredByCode || null,
         createdAt: new Date().toISOString()
       };
 
