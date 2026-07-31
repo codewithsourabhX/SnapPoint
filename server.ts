@@ -3,7 +3,7 @@ import path from 'path';
 import crypto from 'node:crypto';
 import dotenv from 'dotenv';
 import { createServer as createViteServer } from 'vite';
-import { adminDb } from './src/lib/firebaseAdmin';
+import { adminDb } from './api/firebaseAdmin';
 
 dotenv.config();
 
