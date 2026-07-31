@@ -38,9 +38,12 @@ service cloud.firestore {
       allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
       allow update: if request.auth != null && (resource.data.uid == request.auth.uid || request.auth.token.email == 'yadavsourabh8585@gmail.com');
     }
-
-
-
+    // CPX Research postback transactions
+    match /cpx_transactions/{transId} {
+      allow read: if (request.auth != null && (resource.data.userId == request.auth.uid || request.auth.token.email == 'yadavsourabh8585@gmail.com'))
+        || request.auth == null;
+      allow write: if request.auth == null;
+    }
     // Default fallback rule
     match /{document=**} {
       allow read, write: if request.auth != null && request.auth.token.email == 'yadavsourabh8585@gmail.com';
