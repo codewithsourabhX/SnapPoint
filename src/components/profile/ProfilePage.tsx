@@ -12,6 +12,7 @@ import {
   Save,
   Copy,
   Check,
+  Cookie,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { auth } from '../../lib/firebase';
@@ -218,6 +219,17 @@ export const ProfilePage: React.FC = () => {
               <div className="flex items-center gap-3">
                 <Shield className="w-4 h-4 text-slate-700" />
                 <span className="text-xs font-bold text-slate-800">Terms of Service</span>
+              </div>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </button>
+
+            <button
+              onClick={() => setCurrentPage('cookies')}
+              className="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <Cookie className="w-4 h-4 text-slate-700" />
+                <span className="text-xs font-bold text-slate-800">Cookie Policy</span>
               </div>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </button>

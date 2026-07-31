@@ -16,6 +16,7 @@ import { ProfilePage } from './components/profile/ProfilePage';
 import { HelpCenterPage } from './components/help/HelpCenterPage';
 import { TermsPage } from './components/help/TermsPage';
 import { PrivacyPage } from './components/help/PrivacyPage';
+import { CookiePolicyPage } from './components/help/CookiePolicyPage';
 import { AdminPage } from './components/admin/AdminPage';
 import { WithdrawPage } from './components/withdraw/WithdrawPage';
 import { VerifyEmailPage } from './components/auth/VerifyEmailPage';
@@ -72,6 +73,8 @@ const AppContent: React.FC = () => {
         return <TermsPage />;
       case 'privacy':
         return <PrivacyPage />;
+      case 'cookies':
+        return <CookiePolicyPage />;
       case 'help':
         return <HelpCenterPage />;
       default:

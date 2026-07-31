@@ -10,7 +10,8 @@ export type PageView =
   | 'admin'
   | 'help'
   | 'terms'
-  | 'privacy';
+  | 'privacy'
+  | 'cookies';
 
 export interface UserProfile {
   uid?: string;

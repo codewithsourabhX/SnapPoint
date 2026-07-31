@@ -107,6 +107,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (path === '/termsofservice' || path === '/terms') {
         return 'terms';
       }
+      if (path === '/cookiepolicy' || path === '/cookies') {
+        return 'cookies';
+      }
     }
     return 'landing';
   });
@@ -122,6 +125,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (window.location.pathname !== '/termsofservice') {
           window.history.pushState(null, '', '/termsofservice');
         }
+      } else if (currentPage === 'cookies') {
+        if (window.location.pathname !== '/cookiepolicy') {
+          window.history.pushState(null, '', '/cookiepolicy');
+        }
       } else if (currentPage === 'landing') {
         if (window.location.pathname !== '/') {
           window.history.pushState(null, '', '/');
@@ -131,7 +138,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           window.location.pathname === '/privacypolicy' || 
           window.location.pathname === '/privacy' ||
           window.location.pathname === '/termsofservice' ||
-          window.location.pathname === '/terms'
+          window.location.pathname === '/terms' ||
+          window.location.pathname === '/cookiepolicy' ||
+          window.location.pathname === '/cookies'
         ) {
           window.history.pushState(null, '', '/');
         }
