@@ -3,7 +3,7 @@ import { Cookie, ArrowLeft } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 export const CookiePolicyPage: React.FC = () => {
-  const { user, setCurrentPage } = useApp();
+  const { user, currentPage, setCurrentPage } = useApp();
 
   const handleBack = () => {
     if (user && user.uid && user.uid !== 'guest-123') {
@@ -23,6 +23,40 @@ export const CookiePolicyPage: React.FC = () => {
         >
           <ArrowLeft className="w-4 h-4" />
           <span>{user && user.uid && user.uid !== 'guest-123' ? 'Back to Profile' : 'Back to Home'}</span>
+        </button>
+      </div>
+
+      {/* Switcher Widget */}
+      <div className="flex bg-slate-100 dark:bg-slate-900/60 p-1 rounded-xl border border-slate-200 dark:border-slate-800 gap-1 text-xs font-bold max-w-md">
+        <button
+          onClick={() => setCurrentPage('privacy')}
+          className={`flex-1 py-2 px-3 rounded-lg text-center transition-all cursor-pointer ${
+            currentPage === 'privacy' 
+              ? 'bg-rose-600 text-white shadow-xs' 
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
+          }`}
+        >
+          Privacy Policy
+        </button>
+        <button
+          onClick={() => setCurrentPage('terms')}
+          className={`flex-1 py-2 px-3 rounded-lg text-center transition-all cursor-pointer ${
+            currentPage === 'terms' 
+              ? 'bg-rose-600 text-white shadow-xs' 
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
+          }`}
+        >
+          Terms of Use
+        </button>
+        <button
+          onClick={() => setCurrentPage('cookies')}
+          className={`flex-1 py-2 px-3 rounded-lg text-center transition-all cursor-pointer ${
+            currentPage === 'cookies' 
+              ? 'bg-rose-600 text-white shadow-xs' 
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
+          }`}
+        >
+          Cookie Policy
         </button>
       </div>
 
