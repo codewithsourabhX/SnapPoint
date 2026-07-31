@@ -31,7 +31,7 @@ async function startServer() {
       }
 
       const appId = '34860';
-      const secureHash = process.env.CPX_SECURE_HASH || 'DkZJVrX46eJvFPUFItSOPrpxSdh3kpBr';
+      const secureHash = process.env.CPX_SECURE_HASH || 'zGofW04jwqEK6SwZP5t9HXvxTCX23nB0';
       
       // Calculate md5 hash: md5(userId + '-' + secureHash)
       const md5Hash = crypto.createHash('md5').update(`${userId}-${secureHash}`).digest('hex').toLowerCase();
@@ -77,7 +77,7 @@ async function startServer() {
       }
 
       // Verify secure hash if secret or secure_hash is configured
-      const cpxSecret = process.env.CPX_SECURE_HASH || 'DkZJVrX46eJvFPUFItSOPrpxSdh3kpBr' || secure_hash;
+      const cpxSecret = process.env.CPX_SECURE_HASH || 'zGofW04jwqEK6SwZP5t9HXvxTCX23nB0' || secure_hash;
       if (cpxSecret) {
         const hashHyphen = crypto.createHash('md5').update(`${trans_id}-${cpxSecret}`).digest('hex').toLowerCase();
         const hashNoHyphen = crypto.createHash('md5').update(`${trans_id}${cpxSecret}`).digest('hex').toLowerCase();

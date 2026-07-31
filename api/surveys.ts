@@ -23,7 +23,7 @@ export default async function handler(req: any, res: any) {
     }
 
     const appId = '34860';
-    const secureHash = process.env.CPX_SECURE_HASH || 'DkZJVrX46eJvFPUFItSOPrpxSdh3kpBr';
+    const secureHash = process.env.CPX_SECURE_HASH || 'zGofW04jwqEK6SwZP5t9HXvxTCX23nB0';
     
     // Calculate md5 hash: md5(userId + '-' + secureHash)
     const md5Hash = crypto.createHash('md5').update(`${userId}-${secureHash}`).digest('hex').toLowerCase();

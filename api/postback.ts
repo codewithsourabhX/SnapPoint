@@ -40,7 +40,7 @@ export default async function handler(req: any, res: any) {
     }
 
     // Verify secure hash if secret or secure_hash is configured
-    const cpxSecret = process.env.CPX_SECURE_HASH || 'DkZJVrX46eJvFPUFItSOPrpxSdh3kpBr' || secure_hash;
+    const cpxSecret = process.env.CPX_SECURE_HASH || 'zGofW04jwqEK6SwZP5t9HXvxTCX23nB0' || secure_hash;
     if (cpxSecret) {
       const hashHyphen = crypto.createHash('md5').update(`${trans_id}-${cpxSecret}`).digest('hex').toLowerCase();
       const hashNoHyphen = crypto.createHash('md5').update(`${trans_id}${cpxSecret}`).digest('hex').toLowerCase();
