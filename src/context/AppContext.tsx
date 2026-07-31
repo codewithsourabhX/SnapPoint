@@ -104,6 +104,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (path === '/privacypolicy' || path === '/privacy') {
         return 'privacy';
       }
+      if (path === '/termsofservice' || path === '/terms') {
+        return 'terms';
+      }
     }
     return 'landing';
   });
@@ -115,12 +118,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (window.location.pathname !== '/privacypolicy') {
           window.history.pushState(null, '', '/privacypolicy');
         }
+      } else if (currentPage === 'terms') {
+        if (window.location.pathname !== '/termsofservice') {
+          window.history.pushState(null, '', '/termsofservice');
+        }
       } else if (currentPage === 'landing') {
         if (window.location.pathname !== '/') {
           window.history.pushState(null, '', '/');
         }
       } else {
-        if (window.location.pathname === '/privacypolicy' || window.location.pathname === '/privacy') {
+        if (
+          window.location.pathname === '/privacypolicy' || 
+          window.location.pathname === '/privacy' ||
+          window.location.pathname === '/termsofservice' ||
+          window.location.pathname === '/terms'
+        ) {
           window.history.pushState(null, '', '/');
         }
       }
