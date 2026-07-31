@@ -98,10 +98,33 @@ const GUEST_USER: UserProfile = {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentPage, setCurrentPage] = useState<PageView>('landing');
+  const [currentPage, setCurrentPage] = useState<PageView>(() => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      if (path === '/privacypolicy' || path === '/privacy') {
+        return 'privacy';
+      }
+    }
+    return 'landing';
+  });
   const currentPageRef = useRef(currentPage);
   useEffect(() => {
     currentPageRef.current = currentPage;
+    if (typeof window !== 'undefined') {
+      if (currentPage === 'privacy') {
+        if (window.location.pathname !== '/privacypolicy') {
+          window.history.pushState(null, '', '/privacypolicy');
+        }
+      } else if (currentPage === 'landing') {
+        if (window.location.pathname !== '/') {
+          window.history.pushState(null, '', '/');
+        }
+      } else {
+        if (window.location.pathname === '/privacypolicy' || window.location.pathname === '/privacy') {
+          window.history.pushState(null, '', '/');
+        }
+      }
+    }
   }, [currentPage]);
 
   const [user, setUser] = useState<UserProfile>(GUEST_USER);
