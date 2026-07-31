@@ -6,7 +6,7 @@ service cloud.firestore {
     match /users/{userId} {
       // Allow any logged-in user to read user profiles (needed for referral validation)
       allow read: if request.auth != null;
-      // Allow user themselves, master admin, or unauthenticated writes (so backend CPX postbacks can update points)
+      // Allow user themselves, master admin, or unauthenticated writes (so backend postbacks can update points)
       allow create: if (request.auth != null && (request.auth.uid == userId || request.auth.token.email == 'yadavsourabh8585@gmail.com'))
         || request.auth == null;
       allow update: if (request.auth != null && (
@@ -39,13 +39,7 @@ service cloud.firestore {
       allow update: if request.auth != null && (resource.data.uid == request.auth.uid || request.auth.token.email == 'yadavsourabh8585@gmail.com');
     }
 
-    // CPX Research postback transactions
-    match /cpx_transactions/{transId} {
-      // Allow any user to read their own transaction history, and unauthenticated read/write for the postback backend
-      allow read: if (request.auth != null && (resource.data.userId == request.auth.uid || request.auth.token.email == 'yadavsourabh8585@gmail.com'))
-        || request.auth == null;
-      allow write: if request.auth == null; // Allows unauthenticated backend server postbacks
-    }
+
 
     // Default fallback rule
     match /{document=**} {

@@ -429,7 +429,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
     
     const surveyObj = surveys.find(s => s.id === surveyId);
-    const title = surveyObj ? surveyObj.title : 'CPX Survey';
+    const title = surveyObj ? surveyObj.title : 'Survey';
     addPoints(pointsEarned, `Completed Survey: ${title}`, 'survey');
   };
 

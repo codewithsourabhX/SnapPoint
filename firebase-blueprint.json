@@ -41,24 +41,6 @@
         "uid": { "type": "string" }
       },
       "required": ["id", "amountInPoints", "status"]
-    },
-    "cpx_transactions": {
-      "title": "CPX Research Transactions",
-      "description": "Log of postback survey reward transactions from CPX Research",
-      "properties": {
-        "transId": { "type": "string" },
-        "userId": { "type": "string" },
-        "status": { "type": "number" },
-        "subid1": { "type": "string" },
-        "subid2": { "type": "string" },
-        "amountLocal": { "type": "number" },
-        "amountUsd": { "type": "number" },
-        "type": { "type": "string" },
-        "hash": { "type": "string" },
-        "ipClick": { "type": "string" },
-        "processedAt": { "type": "string" }
-      },
-      "required": ["transId", "userId", "status"]
     }
   },
   "firestore": {
@@ -69,10 +51,6 @@
     "/payouts/{payoutId}": {
       "schema": { "$ref": "#/entities/payouts" },
       "description": "Payout requests collection"
-    },
-    "/cpx_transactions/{transId}": {
-      "schema": { "$ref": "#/entities/cpx_transactions" },
-      "description": "CPX Research postback transactions collection"
     }
   }
 }
