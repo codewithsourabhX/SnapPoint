@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import { adminDb } from './firebaseAdmin';
+import { adminDb } from './firebaseAdmin.js';
 
 export default async function handler(req: any, res: any) {
   // Allow CORS
