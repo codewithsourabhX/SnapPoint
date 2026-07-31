@@ -1,10 +1,5 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import crypto from 'node:crypto';
-import firebaseConfig from '../firebase-applet-config.json';
-
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId);
+import { adminDb } from '../src/lib/firebaseAdmin';
 
 export default async function handler(req: any, res: any) {
   // Allow CORS
@@ -56,12 +51,12 @@ export default async function handler(req: any, res: any) {
     }
 
     // Check for duplicate transaction
-    const txRef = doc(db, 'cpx_transactions', String(trans_id));
-    const txSnap = await getDoc(txRef);
+    const txRef = adminDb.collection('cpx_transactions').doc(String(trans_id));
+    const txSnap = await txRef.get();
 
-    if (txSnap.exists()) {
+    if (txSnap.exists) {
       const existingData = txSnap.data();
-      if (existingData.status === status) {
+      if (existingData && existingData.status === status) {
         return res.status(200).json({
           status: 'success',
           message: 'Transaction already processed',
@@ -71,17 +66,17 @@ export default async function handler(req: any, res: any) {
     }
 
     // Fetch user profile from Firestore
-    const userRef = doc(db, 'users', String(user_id));
-    const userSnap = await getDoc(userRef);
+    const userRef = adminDb.collection('users').doc(String(user_id));
+    const userSnap = await userRef.get();
 
-    if (!userSnap.exists()) {
+    if (!userSnap.exists) {
       return res.status(404).json({
         status: 'error',
         error: `User with ID ${user_id} not found`
       });
     }
 
-    const userData = userSnap.data();
+    const userData = userSnap.data() || {};
     const currentPoints = Number(userData.points) || 0;
     const currentSurveys = Number(userData.completedSurveysCount) || 0;
     const pointsToChange = Math.round(Number(amount_local) || 0);
@@ -106,14 +101,14 @@ export default async function handler(req: any, res: any) {
     const newBalanceInRupees = Math.floor(newPoints / 10);
 
     // Update user points and survey count
-    await updateDoc(userRef, {
+    await userRef.update({
       points: newPoints,
       balanceInRupees: newBalanceInRupees,
       completedSurveysCount: newSurveysCount
     });
 
     // Save transaction record to Firestore
-    await setDoc(txRef, {
+    await txRef.set({
       transId: String(trans_id),
       userId: String(user_id),
       status,

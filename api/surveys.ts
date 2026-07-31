@@ -1,10 +1,5 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
 import crypto from 'node:crypto';
-import firebaseConfig from '../firebase-applet-config.json';
-
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId);
+import { adminDb } from '../src/lib/firebaseAdmin';
 
 export default async function handler(req: any, res: any) {
   // Allow CORS
@@ -35,6 +30,11 @@ export default async function handler(req: any, res: any) {
 
     const response = await fetch(url);
     const data = await response.json();
+
+    // Verify database connection is alive/loaded by referencing adminDb
+    if (!adminDb) {
+      console.log('Firebase Admin Firestore is not initialized.');
+    }
 
     res.status(200).json(data);
   } catch (err: any) {

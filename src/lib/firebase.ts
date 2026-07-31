@@ -27,18 +27,16 @@ import {
   serverTimestamp
 } from "firebase/firestore";
 
-import appletConfig from "../../firebase-applet-config.json";
-
-// User's explicitly provided PollBee Firebase configuration synched with Applet Config
+// User's explicitly provided PollBee Firebase configuration
 export const firebaseConfig = {
-  apiKey: appletConfig.apiKey,
-  authDomain: appletConfig.authDomain,
-  projectId: appletConfig.projectId,
-  storageBucket: appletConfig.storageBucket,
-  messagingSenderId: appletConfig.messagingSenderId,
-  appId: appletConfig.appId,
-  measurementId: appletConfig.measurementId || "",
-  firestoreDatabaseId: appletConfig.firestoreDatabaseId
+  apiKey: "AIzaSyAzzAvMQBMTvKXUNXWWYgoRHHiTlFzjyI4",
+  authDomain: "snappoint-5baba.firebaseapp.com",
+  projectId: "snappoint-5baba",
+  storageBucket: "snappoint-5baba.firebasestorage.app",
+  messagingSenderId: "976608408621",
+  appId: "1:976608408621:web:46b054cacfbf1c4312b4a4",
+  measurementId: "G-1DQ2DNRVW1",
+  firestoreDatabaseId: ""
 };
 
 // Initialize Firebase
