@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/api/surveys", "destination": "/api/surveys" },
+    { "source": "/api/cpx/postback", "destination": "/api/postback" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
