@@ -93,7 +93,7 @@ export const LandingPage: React.FC = () => {
           >
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-rose-500" />
-              <span>Minimum Payout: 5000 SnapPoints (₹500)</span>
+              <span>Min Payout: 1000 SnapPoints (₹100) — Low withdrawal limit for faster withdrawals!</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-rose-500" />
@@ -149,7 +149,7 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Cash Out Rewards</h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Redeem 5,000 SnapPoints for ₹500 via UPI (GPay/PhonePe), PayPal, Amazon or Flipkart gift cards.
+                Redeem 1,000 SnapPoints for ₹100 via UPI (GPay/PhonePe), PayPal, Amazon or Flipkart gift cards.
               </p>
             </div>
           </div>
@@ -164,7 +164,7 @@ export const LandingPage: React.FC = () => {
               Supported Payout Options
             </h2>
             <p className="text-slate-600 dark:text-slate-400 text-sm mt-3">
-              Minimum threshold: 5,000 SnapPoints = ₹500
+              Minimum threshold: 1,000 SnapPoints = ₹100
             </p>
           </div>
 

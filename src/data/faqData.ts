@@ -4,13 +4,13 @@ export const INITIAL_FAQS: FAQItem[] = [
   {
     id: 'faq-1',
     question: 'How do points translate into real currency?',
-    answer: 'Every 10 SnapPoints equals ₹1 (or equivalent local currency). For example, 5,000 SnapPoints can be instantly redeemed for ₹500 via UPI, Amazon Gift Cards, Flipkart Vouchers, or PayPal Cash.',
+    answer: 'Every 10 SnapPoints equals ₹1 (or equivalent local currency). For example, 1,000 SnapPoints can be instantly redeemed for ₹100 via UPI, Amazon Gift Cards, Flipkart Vouchers, or PayPal Cash.',
     category: 'General'
   },
   {
     id: 'faq-2',
     question: 'What is the minimum withdrawal limit?',
-    answer: 'The minimum threshold for redemption is 5,000 SnapPoints (₹500). Once you reach 5,000 SnapPoints, you can submit a withdrawal request anytime.',
+    answer: 'The minimum threshold for redemption is only 1,000 SnapPoints (₹100), offering a low withdrawal limit for faster withdrawals. Once you reach 1,000 SnapPoints, you can submit a withdrawal request anytime.',
     category: 'Payouts'
   },
   {

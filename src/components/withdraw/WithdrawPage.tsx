@@ -36,11 +36,11 @@ export const WithdrawPage: React.FC = () => {
   const [paypalEmail, setPaypalEmail] = useState('');
 
   // Amount state
-  const [pointsToWithdraw, setPointsToWithdraw] = useState<number>(5000);
+  const [pointsToWithdraw, setPointsToWithdraw] = useState<number>(1000);
   const [formError, setFormError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const targetGoal = 5000;
+  const targetGoal = 1000;
   const pointsNeeded = Math.max(0, targetGoal - user.points);
   const progressPercent = Math.min(100, Math.round((user.points / targetGoal) * 100));
 
@@ -141,7 +141,7 @@ export const WithdrawPage: React.FC = () => {
           <span>PRO TIP</span>
         </div>
         <p className="leading-relaxed font-medium">
-          SnapPoint offers quick and secure payouts via UPI and PayPal. Once you reach 5,000 SnapPoints (equivalent to ₹500), you can request a withdrawal and start enjoying your earnings!
+          SnapPoint offers quick and secure payouts via UPI and PayPal. Once you reach 1,000 SnapPoints (equivalent to ₹100), you can request a withdrawal and start enjoying your earnings!
         </p>
       </div>
 
@@ -180,21 +180,21 @@ export const WithdrawPage: React.FC = () => {
             <span className="text-blue-600 font-black text-xl italic tracking-tighter">Pay<span className="text-cyan-500">Pal</span></span>
           </div>
           <span className="text-xs font-bold text-slate-800">PayPal Cashout</span>
-          <span className="text-[10px] text-slate-400">Min: 5,000 SnapPoints (₹500)</span>
+          <span className="text-[10px] text-slate-400">Min: 1,000 SnapPoints (₹100)</span>
         </button>
 
         {/* UPI Reward Card */}
         <button
           onClick={() => setSelectedMethod('UPI')}
           className={`p-5 rounded-2xl border text-center transition-all bg-white shadow-xs flex flex-col items-center justify-center gap-3 relative ${
-            selectedMethod === 'UPI' ? 'ring-2 ring-rose-500 border-rose-500' : 'border-slate-200/80'
+            selectedMethod === 'UPI' ? 'ring-2 ring-rose-500 border-rose-500' : 'border-slate-200/85'
           }`}
         >
           <div className="h-10 flex items-center justify-center">
             <span className="text-emerald-600 font-black text-2xl tracking-wider">UPI</span>
           </div>
           <span className="text-xs font-bold text-slate-800">UPI Bank Payout</span>
-          <span className="text-[10px] text-slate-400">Min: 5,000 SnapPoints (₹500)</span>
+          <span className="text-[10px] text-slate-400">Min: 1,000 SnapPoints (₹100)</span>
         </button>
       </div>
 
@@ -205,8 +205,8 @@ export const WithdrawPage: React.FC = () => {
           <label className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
             Select SnapPoints to Redeem
           </label>
-          <div className="grid grid-cols-3 gap-2">
-            {[5000, 10000, 20000].map(amt => (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {[1000, 5000, 10000, 20000].map(amt => (
               <button
                 key={amt}
                 type="button"
@@ -217,7 +217,7 @@ export const WithdrawPage: React.FC = () => {
                     : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                 }`}
               >
-                {amt.toLocaleString()} SnapPoints = ₹{amt / 10}
+                {amt.toLocaleString()} SP = ₹{amt / 10}
               </button>
             ))}
           </div>
