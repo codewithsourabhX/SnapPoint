@@ -1,6 +1,8 @@
 import crypto from 'node:crypto';
 import { adminDb } from '../firebaseAdmin.js';
 
+const cleanString = (val: any) => String(val || '').trim();
+
 export default async function handler(req: any, res: any) {
   // Allow CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -16,13 +18,16 @@ export default async function handler(req: any, res: any) {
 
   try {
     const params = { ...req.query, ...req.body };
-    const user_id = params.user_id;
-    const value = params.value;
-    const token = params.token;
-    const signature = params.signature;
+    
+    // Extract parameters with flexible naming and trim whitespace
+    const user_id = cleanString(params.user_id || params.userId);
+    const value = cleanString(params.reward || params.value || params.amount);
+    const token = cleanString(params.tx_id || params.txId || params.token || params.transaction_id);
+    const signature = cleanString(params.hash || params.signature || params.sig || params.enc);
+    const status = cleanString(params.status || '1'); // 1 = complete, 2 = reversal/chargeback
 
     if (!user_id || !value || !token || !signature) {
-      console.error('[TheoremReach Callback] Missing required parameters');
+      console.error(`[TheoremReach Callback] Missing required parameters. user_id: "${user_id}", value: "${value}", token: "${token}", signature: "${signature}"`);
       return res.status(400).json({ error: 'Missing required parameters' });
     }
 
@@ -34,8 +39,8 @@ export default async function handler(req: any, res: any) {
     const template = `${secretKey}.${user_id}.${valueInt}.${token}`;
     const calculatedSig = crypto.createHash('md5').update(template).digest('hex');
 
-    if (calculatedSig.toLowerCase() !== String(signature).toLowerCase()) {
-      console.error(`[TheoremReach Callback] Signature mismatch. Calculated: ${calculatedSig}, Received: ${signature}`);
+    if (calculatedSig.toLowerCase() !== signature.toLowerCase()) {
+      console.error(`[TheoremReach Callback] Signature mismatch. Template: "${template}", Calculated: ${calculatedSig}, Received: ${signature}`);
       return res.status(401).json({ error: 'Invalid signature (Unauthorized)' });
     }
 
@@ -44,8 +49,11 @@ export default async function handler(req: any, res: any) {
     const txSnap = await txRef.get();
 
     if (txSnap.exists) {
-      console.log(`[TheoremReach Callback] Duplicate transaction detected: ${token}`);
-      return res.status(200).json({ status: 'success', message: 'Transaction already processed', token });
+      const existingData = txSnap.data();
+      if (existingData && existingData.status === status) {
+        console.log(`[TheoremReach Callback] Duplicate transaction detected: ${token} with status: ${status}`);
+        return res.status(200).json({ status: 'success', message: 'Transaction already processed', token });
+      }
     }
 
     // Fetch user profile from Firestore
@@ -62,8 +70,18 @@ export default async function handler(req: any, res: any) {
     const currentSurveys = Number(userData.completedSurveysCount) || 0;
     const pointsToChange = Math.round(Number(value) || 0);
 
-    const newPoints = currentPoints + pointsToChange;
-    const newSurveysCount = currentSurveys + 1;
+    let newPoints = currentPoints;
+    let newSurveysCount = currentSurveys;
+
+    if (status === '2') {
+      // Reversal/chargeback
+      newPoints = Math.max(0, currentPoints - pointsToChange);
+    } else {
+      // Reward credit
+      newPoints = currentPoints + pointsToChange;
+      newSurveysCount = currentSurveys + 1;
+    }
+
     const newBalanceInRupees = Math.floor(newPoints / 10);
 
     // Update user points and survey count
@@ -78,17 +96,18 @@ export default async function handler(req: any, res: any) {
       transId: String(token),
       userId: String(user_id),
       amountPoints: pointsToChange,
+      status,
       processedAt: new Date().toISOString()
     });
 
-    console.log(`[TheoremReach Callback] Success. Credited ${pointsToChange} points to user ${user_id}`);
+    console.log(`[TheoremReach Callback] Success. Processed status ${status} with ${pointsToChange} points for user ${user_id}`);
 
     return res.status(200).json({
       status: 'success',
       message: 'Reward processed successfully',
       token,
       user_id,
-      credited_points: pointsToChange
+      credited_points: status === '2' ? -pointsToChange : pointsToChange
     });
   } catch (err: any) {
     console.error('[TheoremReach Callback Error]:', err);

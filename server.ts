@@ -181,12 +181,17 @@ async function startServer() {
 
     try {
       const params = { ...req.query, ...req.body };
-      const user_id = params.user_id;
-      const value = params.value;
-      const token = params.token;
-      const signature = params.signature;
+      
+      const cleanStr = (val: any) => String(val || '').trim();
+      
+      const user_id = cleanStr(params.user_id || params.userId);
+      const value = cleanStr(params.reward || params.value || params.amount);
+      const token = cleanStr(params.tx_id || params.txId || params.token || params.transaction_id);
+      const signature = cleanStr(params.hash || params.signature || params.sig || params.enc);
+      const status = cleanStr(params.status || '1'); // 1 = complete, 2 = reversal/chargeback
 
       if (!user_id || !value || !token || !signature) {
+        console.error(`[Express - TheoremReach Callback] Missing required parameters. user_id: "${user_id}", value: "${value}", token: "${token}", signature: "${signature}"`);
         return res.status(400).json({ error: 'Missing required parameters' });
       }
 
@@ -198,7 +203,7 @@ async function startServer() {
       const template = `${secretKey}.${user_id}.${valueInt}.${token}`;
       const calculatedSig = crypto.createHash('md5').update(template).digest('hex');
 
-      if (calculatedSig.toLowerCase() !== String(signature).toLowerCase()) {
+      if (calculatedSig.toLowerCase() !== signature.toLowerCase()) {
         console.error(`[Express - TheoremReach Callback] Signature mismatch. Calculated: ${calculatedSig}, Received: ${signature}`);
         return res.status(401).json({ error: 'Invalid signature' });
       }
@@ -208,8 +213,11 @@ async function startServer() {
       const txSnap = await txRef.get();
 
       if (txSnap.exists) {
-        console.log(`[Express - TheoremReach Callback] Duplicate transaction detected: ${token}`);
-        return res.status(200).json({ status: 'success', message: 'Transaction already processed', token });
+        const existingData = txSnap.data();
+        if (existingData && existingData.status === status) {
+          console.log(`[Express - TheoremReach Callback] Duplicate transaction detected: ${token} with status: ${status}`);
+          return res.status(200).json({ status: 'success', message: 'Transaction already processed', token });
+        }
       }
 
       // Fetch user profile from Firestore
@@ -225,8 +233,18 @@ async function startServer() {
       const currentSurveys = Number(userData.completedSurveysCount) || 0;
       const pointsToChange = Math.round(Number(value) || 0);
 
-      const newPoints = currentPoints + pointsToChange;
-      const newSurveysCount = currentSurveys + 1;
+      let newPoints = currentPoints;
+      let newSurveysCount = currentSurveys;
+
+      if (status === '2') {
+        // Reversal/chargeback
+        newPoints = Math.max(0, currentPoints - pointsToChange);
+      } else {
+        // Reward credit
+        newPoints = currentPoints + pointsToChange;
+        newSurveysCount = currentSurveys + 1;
+      }
+
       const newBalanceInRupees = Math.floor(newPoints / 10);
 
       // Update user points and survey count
@@ -241,17 +259,18 @@ async function startServer() {
         transId: String(token),
         userId: String(user_id),
         amountPoints: pointsToChange,
+        status,
         processedAt: new Date().toISOString()
       });
 
-      console.log(`[Express - TheoremReach Callback] Success. Credited ${pointsToChange} points to user ${user_id}`);
+      console.log(`[Express - TheoremReach Callback] Success. Processed status ${status} with ${pointsToChange} points for user ${user_id}`);
 
       return res.status(200).json({
         status: 'success',
         message: 'Reward processed successfully',
         token,
         user_id,
-        credited_points: pointsToChange
+        credited_points: status === '2' ? -pointsToChange : pointsToChange
       });
     } catch (err: any) {
       console.error('[Express - TheoremReach Callback Error]:', err);
