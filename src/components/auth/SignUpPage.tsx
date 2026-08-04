@@ -4,6 +4,7 @@ import { Zap, Mail, Lock, User, Tag, ArrowRight, ShieldCheck, Loader2 } from 'lu
 import { useApp } from '../../context/AppContext';
 import { auth, googleProvider, signInWithPopup, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, db, doc, setDoc, collection, query, where, getDocs, updateDoc } from '../../lib/firebase';
 import { UserProfile } from '../../types';
+import { TurnstileWidget } from '../common/TurnstileWidget';
 
 export const SignUpPage: React.FC = () => {
   const { setCurrentPage, addToast, triggerConfetti } = useApp();
@@ -13,6 +14,7 @@ export const SignUpPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [referralCode, setReferralCode] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
@@ -30,9 +32,29 @@ export const SignUpPage: React.FC = () => {
       addToast({ title: 'Agreement Required', message: 'Please agree to the Privacy Policy and Terms of Service to create an account.', type: 'warning' });
       return;
     }
+    if (!turnstileToken) {
+      addToast({ title: 'Verification Required', message: 'Please complete the Turnstile bot verification.', type: 'warning' });
+      return;
+    }
 
     setLoading(true);
     try {
+      // Server-side Turnstile verification
+      const verifyRes = await fetch('/api/verify-turnstile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: turnstileToken })
+      });
+      const verifyData = await verifyRes.json();
+
+      if (!verifyRes.ok || !verifyData.success) {
+        window.turnstile?.reset();
+        setTurnstileToken('');
+        addToast({ title: 'Security Check Failed', message: 'Bot verification failed. Please try again.', type: 'error' });
+        setLoading(false);
+        return;
+      }
+
       const res = await createUserWithEmailAndPassword(auth, email, password);
       if (res.user) {
         await updateProfile(res.user, { displayName: fullName });
@@ -347,6 +369,14 @@ export const SignUpPage: React.FC = () => {
               </button>
             </label>
           </div>
+
+          {/* Cloudflare Turnstile Bot Verification */}
+          <TurnstileWidget
+            onVerify={(token) => setTurnstileToken(token)}
+            onExpire={() => setTurnstileToken('')}
+            onError={() => setTurnstileToken('')}
+            action="turnstile-spin-v2"
+          />
 
           <button
             type="submit"

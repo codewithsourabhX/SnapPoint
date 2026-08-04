@@ -3,11 +3,13 @@ import { motion } from 'motion/react';
 import { Zap, Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { auth, googleProvider, signInWithPopup, signInWithEmailAndPassword } from '../../lib/firebase';
+import { TurnstileWidget } from '../common/TurnstileWidget';
 
 export const LoginPage: React.FC = () => {
   const { setCurrentPage, addToast } = useApp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
@@ -17,9 +19,29 @@ export const LoginPage: React.FC = () => {
       addToast({ title: 'Input Required', message: 'Please enter both email and password.', type: 'warning' });
       return;
     }
+    if (!turnstileToken) {
+      addToast({ title: 'Verification Required', message: 'Please complete the Turnstile bot verification.', type: 'warning' });
+      return;
+    }
 
     setLoading(true);
     try {
+      // Server-side Turnstile verification
+      const verifyRes = await fetch('/api/verify-turnstile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: turnstileToken })
+      });
+      const verifyData = await verifyRes.json();
+
+      if (!verifyRes.ok || !verifyData.success) {
+        window.turnstile?.reset();
+        setTurnstileToken('');
+        addToast({ title: 'Security Check Failed', message: 'Bot verification failed. Please try again.', type: 'error' });
+        setLoading(false);
+        return;
+      }
+
       const res = await signInWithEmailAndPassword(auth, email, password);
       addToast({
         title: 'Welcome Back! 👋',
@@ -173,6 +195,14 @@ export const LoginPage: React.FC = () => {
               />
             </div>
           </div>
+
+          {/* Cloudflare Turnstile Bot Verification */}
+          <TurnstileWidget
+            onVerify={(token) => setTurnstileToken(token)}
+            onExpire={() => setTurnstileToken('')}
+            onError={() => setTurnstileToken('')}
+            action="turnstile-spin-v2"
+          />
 
           <button
             type="submit"

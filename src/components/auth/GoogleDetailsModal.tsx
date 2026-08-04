@@ -4,6 +4,7 @@ import { User, Tag, Sparkles, Loader2, CheckCircle2 } from 'lucide-react';
 import { db, doc, setDoc, getDocs, collection, query, where, updateDoc } from '../../lib/firebase';
 import { UserProfile } from '../../types';
 import { useApp } from '../../context/AppContext';
+import { TurnstileWidget } from '../common/TurnstileWidget';
 
 interface GoogleDetailsModalProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ export const GoogleDetailsModal: React.FC<GoogleDetailsModalProps> = ({
   const [name, setName] = useState(authUser.displayName || '');
   const [referralCodeInput, setReferralCodeInput] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -35,11 +37,30 @@ export const GoogleDetailsModal: React.FC<GoogleDetailsModalProps> = ({
       setErrorMsg('Please agree to the Privacy Policy and Terms of Service to continue.');
       return;
     }
+    if (!turnstileToken) {
+      setErrorMsg('Please complete the Turnstile bot verification.');
+      return;
+    }
 
     setLoading(true);
     setErrorMsg('');
 
     try {
+      // Server-side Turnstile verification
+      const verifyRes = await fetch('/api/verify-turnstile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: turnstileToken })
+      });
+      const verifyData = await verifyRes.json();
+
+      if (!verifyRes.ok || !verifyData.success) {
+        window.turnstile?.reset();
+        setTurnstileToken('');
+        setErrorMsg('Bot verification failed. Please try again.');
+        setLoading(false);
+        return;
+      }
       // 1. Generate unique referral code for new user
       let uniqueCode = '';
       let codeExists = true;
@@ -233,6 +254,14 @@ export const GoogleDetailsModal: React.FC<GoogleDetailsModalProps> = ({
               </button>
             </label>
           </div>
+
+          {/* Cloudflare Turnstile Bot Verification */}
+          <TurnstileWidget
+            onVerify={(token) => setTurnstileToken(token)}
+            onExpire={() => setTurnstileToken('')}
+            onError={() => setTurnstileToken('')}
+            action="turnstile-spin-v2"
+          />
 
           <button
             type="submit"

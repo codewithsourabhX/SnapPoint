@@ -3,6 +3,7 @@
     { "source": "/api/surveys", "destination": "/api/surveys" },
     { "source": "/api/cpx/postback", "destination": "/api/postback" },
     { "source": "/api/theoremreach/reward", "destination": "/api/theoremreach/reward" },
+    { "source": "/api/verify-turnstile", "destination": "/api/verify-turnstile" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
