@@ -121,34 +121,34 @@ export const LandingPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Step 1 */}
-            <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 dark:border-slate-800">
+            <div className="p-8 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs">
               <div className="w-10 h-10 rounded-2xl bg-rose-600 text-white font-extrabold flex items-center justify-center text-lg mb-6 shadow-md shadow-rose-600/20">
                 1
               </div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Create Account</h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                 Sign up in seconds with your email or Google Auth. Receive starter bonus SnapPoints immediately.
               </p>
             </div>
 
             {/* Step 2 */}
-            <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 dark:border-slate-800">
+            <div className="p-8 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs">
               <div className="w-10 h-10 rounded-2xl bg-rose-600 text-white font-extrabold flex items-center justify-center text-lg mb-6 shadow-md shadow-rose-600/20">
                 2
               </div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Complete Surveys</h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                 Answer high-paying opinion surveys from top market research partners. Earn SnapPoints automatically credited to your balance.
               </p>
             </div>
 
             {/* Step 3 */}
-            <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 dark:border-slate-800">
+            <div className="p-8 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs">
               <div className="w-10 h-10 rounded-2xl bg-rose-600 text-white font-extrabold flex items-center justify-center text-lg mb-6 shadow-md shadow-rose-600/20">
                 3
               </div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Cash Out Rewards</h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                 Redeem 1,000 SnapPoints for ₹100 via UPI (GPay/PhonePe), PayPal, Amazon or Flipkart gift cards.
               </p>
             </div>
