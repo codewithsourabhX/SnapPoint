@@ -12,6 +12,7 @@ export const SignUpPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [referralCode, setReferralCode] = useState('');
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
@@ -23,6 +24,10 @@ export const SignUpPage: React.FC = () => {
     }
     if (password !== confirmPassword) {
       addToast({ title: 'Password Mismatch', message: 'Passwords do not match.', type: 'error' });
+      return;
+    }
+    if (!agreedToTerms) {
+      addToast({ title: 'Agreement Required', message: 'Please agree to the Privacy Policy and Terms of Service to create an account.', type: 'warning' });
       return;
     }
 
@@ -303,6 +308,44 @@ export const SignUpPage: React.FC = () => {
                 className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 uppercase tracking-wider"
               />
             </div>
+          </div>
+
+          {/* Terms & Privacy Checkbox */}
+          <div className="flex items-start gap-2.5 pt-1">
+            <input
+              type="checkbox"
+              id="terms-signup"
+              required
+              checked={agreedToTerms}
+              onChange={e => setAgreedToTerms(e.target.checked)}
+              className="mt-0.5 w-4 h-4 rounded border-neutral-300 dark:border-neutral-700 text-rose-600 focus:ring-rose-500 cursor-pointer accent-rose-600"
+            />
+            <label htmlFor="terms-signup" className="text-xs text-neutral-600 dark:text-neutral-400 font-medium leading-tight cursor-pointer select-none">
+              I agree to the{' '}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setCurrentPage('privacy');
+                }}
+                className="font-bold text-rose-600 dark:text-rose-400 hover:underline cursor-pointer inline"
+              >
+                Privacy Policy
+              </button>{' '}
+              and{' '}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setCurrentPage('terms');
+                }}
+                className="font-bold text-rose-600 dark:text-rose-400 hover:underline cursor-pointer inline"
+              >
+                Terms of Service
+              </button>
+            </label>
           </div>
 
           <button

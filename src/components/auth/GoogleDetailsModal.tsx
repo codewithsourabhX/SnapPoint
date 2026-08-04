@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { User, Tag, Sparkles, Loader2, CheckCircle2 } from 'lucide-react';
 import { db, doc, setDoc, getDocs, collection, query, where, updateDoc } from '../../lib/firebase';
 import { UserProfile } from '../../types';
+import { useApp } from '../../context/AppContext';
 
 interface GoogleDetailsModalProps {
   isOpen: boolean;
@@ -15,8 +16,10 @@ export const GoogleDetailsModal: React.FC<GoogleDetailsModalProps> = ({
   authUser,
   onComplete
 }) => {
+  const { setCurrentPage } = useApp();
   const [name, setName] = useState(authUser.displayName || '');
   const [referralCodeInput, setReferralCodeInput] = useState('');
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -26,6 +29,10 @@ export const GoogleDetailsModal: React.FC<GoogleDetailsModalProps> = ({
     e.preventDefault();
     if (!name.trim()) {
       setErrorMsg('Please enter your full name.');
+      return;
+    }
+    if (!agreedToTerms) {
+      setErrorMsg('Please agree to the Privacy Policy and Terms of Service to continue.');
       return;
     }
 
@@ -187,6 +194,44 @@ export const GoogleDetailsModal: React.FC<GoogleDetailsModalProps> = ({
             <p className="text-[11px] text-neutral-400 mt-1">
               Enter a friend's code if you were invited by them.
             </p>
+          </div>
+
+          {/* Terms & Privacy Checkbox */}
+          <div className="flex items-start gap-2.5 pt-1">
+            <input
+              type="checkbox"
+              id="terms-google-modal"
+              required
+              checked={agreedToTerms}
+              onChange={e => setAgreedToTerms(e.target.checked)}
+              className="mt-0.5 w-4 h-4 rounded border-neutral-300 dark:border-neutral-700 text-amber-500 focus:ring-amber-500 cursor-pointer accent-amber-500"
+            />
+            <label htmlFor="terms-google-modal" className="text-xs text-neutral-600 dark:text-neutral-400 font-medium leading-tight cursor-pointer select-none">
+              I agree to the{' '}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setCurrentPage('privacy');
+                }}
+                className="font-bold text-amber-600 dark:text-amber-400 hover:underline cursor-pointer inline"
+              >
+                Privacy Policy
+              </button>{' '}
+              and{' '}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setCurrentPage('terms');
+                }}
+                className="font-bold text-amber-600 dark:text-amber-400 hover:underline cursor-pointer inline"
+              >
+                Terms of Service
+              </button>
+            </label>
           </div>
 
           <button
