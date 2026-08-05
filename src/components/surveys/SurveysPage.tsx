@@ -206,15 +206,13 @@ export const SurveysPage: React.FC = () => {
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
                 whileHover={{ y: -3, scale: 1.02 }}
-                className={`p-5 bg-slate-900 hover:bg-slate-800/80 rounded-2xl border shadow-xs flex flex-col items-center justify-center space-y-3 text-center transition-all relative group cursor-pointer ${
-                  isTheoremReach ? 'border-purple-900/60 hover:border-purple-500/40' : 'border-slate-800 hover:border-emerald-500/40'
-                }`}
+                className="p-5 bg-slate-900 hover:bg-slate-800/80 rounded-2xl border border-slate-800 hover:border-emerald-500/40 shadow-xs flex flex-col items-center justify-center space-y-3 text-center transition-all relative group cursor-pointer"
               >
-                {isTheoremReach && (
-                  <div className="absolute top-2 right-2 bg-purple-500/10 text-purple-400 text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md">
-                    TheoremReach
-                  </div>
-                )}
+                {/* Provider Tag */}
+                <div className="absolute top-2 right-2 bg-slate-800 border border-slate-700/60 text-slate-300 text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md">
+                  {isTheoremReach ? 'TheoremReach' : 'CPX Research'}
+                </div>
+
                 {/* Length of Interview */}
                 <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400">
                   <Clock className="w-4 h-4 text-slate-500" />
@@ -222,9 +220,7 @@ export const SurveysPage: React.FC = () => {
                 </div>
 
                 {/* Survey Points Reward */}
-                <div className={`text-xl font-black tracking-tight ${
-                  isTheoremReach ? 'text-purple-400' : 'text-emerald-500'
-                }`}>
+                <div className="text-xl font-black text-emerald-500 tracking-tight">
                   +{isTheoremReach ? 'Up to ' : ''}{points.toLocaleString()} SP
                 </div>
 
