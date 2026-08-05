@@ -145,6 +145,34 @@ export const LoginPage: React.FC = () => {
           <span>{googleLoading ? 'Connecting Google Account...' : 'Continue with Google'}</span>
         </button>
 
+        <p className="text-[11px] text-neutral-500 dark:text-neutral-400 text-center font-medium leading-tight px-2">
+          By continuing with Google, you agree to SnapPoint's{' '}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setCurrentPage('privacy');
+            }}
+            className="font-bold text-rose-600 dark:text-rose-400 hover:underline cursor-pointer inline"
+          >
+            Privacy Policy
+          </button>{' '}
+          and{' '}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setCurrentPage('terms');
+            }}
+            className="font-bold text-rose-600 dark:text-rose-400 hover:underline cursor-pointer inline"
+          >
+            Terms of Service
+          </button>
+          .
+        </p>
+
         <div className="relative flex items-center justify-center">
           <div className="border-t border-neutral-200 dark:border-neutral-800 w-full" />
           <span className="bg-white dark:bg-neutral-900 px-3 text-[11px] text-neutral-400 uppercase font-semibold shrink-0">
