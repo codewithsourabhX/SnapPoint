@@ -206,27 +206,30 @@ export const SurveysPage: React.FC = () => {
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
                 whileHover={{ y: -3, scale: 1.02 }}
-                className="p-5 bg-slate-900 hover:bg-slate-800/80 rounded-2xl border border-slate-800 hover:border-emerald-500/40 shadow-xs flex flex-col items-center justify-center space-y-3 text-center transition-all relative group cursor-pointer"
+                className="p-3.5 sm:p-5 bg-slate-900 hover:bg-slate-800/80 rounded-2xl border border-slate-800 hover:border-emerald-500/40 shadow-xs flex flex-col justify-between transition-all group cursor-pointer"
               >
-                {/* Provider Tag */}
-                <div className="absolute top-2 right-2 bg-slate-800 border border-slate-700/60 text-slate-300 text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md">
-                  {isTheoremReach ? 'TheoremReach' : 'CPX Research'}
+                {/* Top Row: Time (Left) & Provider Tag (Right) */}
+                <div className="w-full flex items-center justify-between gap-1 border-b border-slate-800/60 pb-2">
+                  <div className="flex items-center gap-1 text-[10px] sm:text-xs font-bold text-slate-400 shrink-0">
+                    <Clock className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                    <span>{survey.loi} min</span>
+                  </div>
+
+                  <span className="bg-slate-800 border border-slate-700/60 text-slate-300 text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md shrink-0">
+                    {isTheoremReach ? 'TheoremReach' : 'CPX Research'}
+                  </span>
                 </div>
 
-                {/* Length of Interview */}
-                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400">
-                  <Clock className="w-4 h-4 text-slate-500" />
-                  <span>{survey.loi} min</span>
+                {/* Middle: Survey Points Reward */}
+                <div className="my-2 text-center">
+                  <div className="text-base sm:text-xl font-black text-emerald-500 tracking-tight">
+                    +{isTheoremReach ? 'Up to ' : ''}{points.toLocaleString()} SP
+                  </div>
                 </div>
 
-                {/* Survey Points Reward */}
-                <div className="text-xl font-black text-emerald-500 tracking-tight">
-                  +{isTheoremReach ? 'Up to ' : ''}{points.toLocaleString()} SP
-                </div>
-
-                {/* Rating details */}
-                <div className="flex items-center gap-1 text-xs font-semibold text-slate-400">
-                  <Star className={`w-4 h-4 ${ratingAvg > 0 ? 'text-amber-500 fill-amber-500' : 'text-slate-600'}`} />
+                {/* Bottom: Rating details */}
+                <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs font-semibold text-slate-400 pt-1 border-t border-slate-800/40">
+                  <Star className={`w-3.5 h-3.5 ${ratingAvg > 0 ? 'text-amber-500 fill-amber-500' : 'text-slate-600'}`} />
                   <span>
                     {ratingAvg > 0 
                       ? `${ratingAvg.toFixed(0)} (${ratingCount})` 
